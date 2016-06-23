@@ -1,0 +1,11 @@
+#version 400
+in vec2 tUV;
+out vec4 gOutput;
+
+uniform sampler2D gTexture0;
+uniform vec3 gColor;
+
+void main()
+{
+ gOutput = vec4(gColor,texture(gTexture0,tUV).r);
+}

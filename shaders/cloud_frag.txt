@@ -1,0 +1,13 @@
+#version 400
+
+in vec3 tOrigin;
+
+out vec4 gOutput;
+//Default variables
+uniform float gTime;
+
+void main() 
+{
+    vec4 textureColor = vec4(tOrigin*0.5f+0.5f,abs(cos(gTime)));
+    gOutput = textureColor;
+}

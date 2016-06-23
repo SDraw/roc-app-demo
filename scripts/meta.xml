@@ -1,0 +1,13 @@
+<meta>
+    <script src="test/data.lua"/>
+    <script src="test/scenes.lua"/>
+    <script src="test/fonts.lua"/>
+    <script src="test/shaders.lua"/>
+    <script src="test/animations.lua"/>
+    <script src="test/sounds.lua"/>
+    <script src="test/control.lua"/>
+    <script src="test/rendering.lua"/>
+    <script src="test/geometry.lua"/>
+    <script src="test/models.lua"/>
+    <script src="test/world.lua"/>
+</meta>

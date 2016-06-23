@@ -1,0 +1,49 @@
+#version 400
+in vec2 tUV;
+in vec3 tNormal;
+in vec4 tShadowCoord;
+out vec4 gOutput;
+//Default variables
+uniform sampler2D gTexture0;
+uniform bool gLighting;
+uniform vec3 gLightDirection;
+uniform int gMaterialType;
+
+//Custom variables
+uniform sampler2DShadow gTexture3;
+uniform float gShadowSamples;
+uniform samplerCube gTexture5;
+
+const float gShadowMapSize = 1.f/4096.f;
+const vec2 gTexMapScale = vec2(gShadowMapSize);
+
+float calculateShadow()
+{
+    vec3 l_coord = tShadowCoord.xyz*0.5+0.5;
+    if(l_coord.x < 0.f || l_coord.x > 1.f || l_coord.y < 0.f || l_coord.y > 1.f) return 1.f;
+    vec2 sumCount = vec2(0.f,0.f);
+    float l_depthBiased = l_coord.z-0.001f;
+    vec2 l_sample;
+    for (l_sample.y = -gShadowSamples; l_sample.y <= gShadowSamples; l_sample.y += 1.0)
+    {
+        for (l_sample.x = -gShadowSamples; l_sample.x <= gShadowSamples; l_sample.x += 1.0)
+        {
+            sumCount.x += textureProj(gTexture3,vec4(l_coord.xy+l_sample*gTexMapScale*tShadowCoord.w,l_depthBiased,tShadowCoord.w));
+            sumCount.y++;
+        }
+    }
+    return sumCount.x/sumCount.y;
+}
+vec4 calculateIrradiance(vec4 l_diffuse)
+{
+    if(gMaterialType%2 == 0) return l_diffuse;
+    return vec4(l_diffuse.rgb*texture(gTexture5,gl_FrontFacing ? tNormal : -tNormal).rgb+calculateShadow()*max(0.0,dot(gl_FrontFacing ? tNormal : -tNormal,-gLightDirection))*l_diffuse.rgb*0.65f,l_diffuse.a);
+}
+
+void main() 
+{
+    vec4 l_textureColor = texture(gTexture0,tUV.xy);
+    if(l_textureColor.a == 0.0) discard;
+    if(gLighting == true) l_textureColor = calculateIrradiance(l_textureColor);
+    gOutput = l_textureColor;
+}
