@@ -19,7 +19,6 @@ shaderSetUniformValue(data.shader["default"].element,data.shader["default"].shad
 
 data.shader["text"] = {}
 data.shader["text"].element = shaderCreate("shaders/text_vert.txt","shaders/text_frag.txt")
-data.shader["text"].colorUniform = shaderGetUniform(data.shader["text"].element,"gColor")
 
 data.shader["cloud"] = shaderCreate("shaders/cloud_vert.txt","shaders/cloud_frag.txt")
 

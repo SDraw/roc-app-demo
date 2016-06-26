@@ -1,4 +1,4 @@
-data.fps = 0
+﻿data.fps = 0
 
 data.target = {}
 
@@ -131,71 +131,69 @@ function rendering.stage.gui()
     end
     
     setActiveShader(data.shader["text"].element)
-    shaderSetUniformValue(data.shader["text"].element,data.shader["text"].colorUniform,"fvec3",0.0,0.0,0.0)
     local l_text = string.format("FPS: %.0f",data.fps)
-    fontDraw(data.font["default"],18.0,control.window[2]-38.0,l_text)
+    fontDraw(data.font["default"],18.0,control.window[2]-38.0,l_text, 0,0,0,1)
     l_text = string.format("Shadow samples: %.0f",control.samples)
-    fontDraw(data.font["default"],18.0,control.window[2]-58.0,l_text)
+    fontDraw(data.font["default"],18.0,control.window[2]-58.0,l_text, 0,0,0,1)
     l_text = string.format("Camera position: %.4f,%.4f,%.4f",control.camera.position.x,control.camera.position.y,control.camera.position.z)
-    fontDraw(data.font["default"],18.0,control.window[2]-78.0,l_text)
+    fontDraw(data.font["default"],18.0,control.window[2]-78.0,l_text, 0,0,0,1)
     l_text = string.format("Camera direction: %.4f,%.4f,%.4f",control.camera.direction.x,control.camera.direction.y,control.camera.direction.z)
-    fontDraw(data.font["default"],18.0,control.window[2]-98.0,l_text)
+    fontDraw(data.font["default"],18.0,control.window[2]-98.0,l_text, 0,0,0,1)
     l_text = string.format("Camera up: %.4f,%.4f,%.4f",control.camera.up.x,control.camera.up.y,control.camera.up.z)
-    fontDraw(data.font["default"],18.0,control.window[2]-118.0,l_text)
+    fontDraw(data.font["default"],18.0,control.window[2]-118.0,l_text, 0,0,0,1)
     l_text = string.format("Tick: %.4f",control.tick)
-    fontDraw(data.font["default"],18.0,control.window[2]-138.0,l_text)
+    fontDraw(data.font["default"],18.0,control.window[2]-138.0,l_text, 0,0,0,1)
     l_text = string.format("BGM time: %.4f",l_bgmTime)
-    fontDraw(data.font["default"],18.0,control.window[2]-158.0,l_text)
+    fontDraw(data.font["default"],18.0,control.window[2]-158.0,l_text, 0,0,0,1)
     l_text = string.format("BGM state: %s",l_bgmState)
-    fontDraw(data.font["default"],18.0,control.window[2]-178.0,l_text)
+    fontDraw(data.font["default"],18.0,control.window[2]-178.0,l_text, 0,0,0,1)
     if(control.hit.endX ~= false) then
         l_text = string.format("RayCast end: %.4f,%.4f,%.4f",control.hit.endX,control.hit.endY,control.hit.endZ)
-        fontDraw(data.font["default"],18.0,control.window[2]-198.0,l_text)
+        fontDraw(data.font["default"],18.0,control.window[2]-198.0,l_text, 0,0,0,1)
         l_text = string.format("RayCast normal: %.4f,%.4f,%.4f",control.hit.normalX,control.hit.normalY,control.hit.normalZ)
-        fontDraw(data.font["default"],18.0,control.window[2]-218.0,l_text)
+        fontDraw(data.font["default"],18.0,control.window[2]-218.0,l_text, 0,0,0,1)
         if(type(control.hit.model) == "userdata") then
             l_text = "RayCast object: "..getElementType(control.hit.model).." -> "..tostring(control.hit.model)
         elseif(type(control.hit.model) == "string") then
             l_text = "RayCast object: "..control.hit.model
         end
-        fontDraw(data.font["default"],18.0,control.window[2]-238.0,l_text)
+        fontDraw(data.font["default"],18.0,control.window[2]-238.0,l_text, 0,0,0,1)
     else
-        fontDraw(data.font["default"],18.0,control.window[2]-198.0,"RayCast end: No hit")
+        fontDraw(data.font["default"],18.0,control.window[2]-198.0,"RayCast end: No hit", 0,0,0,1)
     end
     
-    shaderSetUniformValue(data.shader["text"].element,data.shader["text"].colorUniform,"fvec3",1.0,1.0,1.0)
     l_text = string.format("FPS: %.0f",data.fps)
-    fontDraw(data.font["default"],17.0,control.window[2]-37.0,l_text)
+    fontDraw(data.font["default"],17.0,control.window[2]-37.0,l_text, 1,1,1,1)
     l_text = string.format("Shadow samples: %.0f",control.samples)
-    fontDraw(data.font["default"],17.0,control.window[2]-57.0,l_text)
+    fontDraw(data.font["default"],17.0,control.window[2]-57.0,l_text, 1,1,1,1)
     l_text = string.format("Camera position: %.4f,%.4f,%.4f",control.camera.position.x,control.camera.position.y,control.camera.position.z)
-    fontDraw(data.font["default"],17.0,control.window[2]-77.0,l_text)
+    fontDraw(data.font["default"],17.0,control.window[2]-77.0,l_text, 1,1,1,1)
     l_text = string.format("Camera direction: %.4f,%.4f,%.4f",control.camera.direction.x,control.camera.direction.y,control.camera.direction.z)
-    fontDraw(data.font["default"],17.0,control.window[2]-97.0,l_text)
+    fontDraw(data.font["default"],17.0,control.window[2]-97.0,l_text, 1,1,1,1)
     l_text = string.format("Camera up: %.4f,%.4f,%.4f",control.camera.up.x,control.camera.up.y,control.camera.up.z)
-    fontDraw(data.font["default"],17.0,control.window[2]-117.0,l_text)
+    fontDraw(data.font["default"],17.0,control.window[2]-117.0,l_text, 1,1,1,1)
     l_text = string.format("Tick: %.4f",control.tick)
-    fontDraw(data.font["default"],17.0,control.window[2]-137.0,l_text)
+    fontDraw(data.font["default"],17.0,control.window[2]-137.0,l_text, 1,1,1,1)
     l_text = string.format("BGM time: %.4f",l_bgmTime)
-    fontDraw(data.font["default"],17.0,control.window[2]-157.0,l_text)
+    fontDraw(data.font["default"],17.0,control.window[2]-157.0,l_text, 1,1,1,1)
     l_text = string.format("BGM state: %s",l_bgmState)
-    fontDraw(data.font["default"],17.0,control.window[2]-177.0,l_text)
+    fontDraw(data.font["default"],17.0,control.window[2]-177.0,l_text, 1,1,1,1)
     if(control.hit.endX ~= false) then
         l_text = string.format("RayCast end: %.4f,%.4f,%.4f",control.hit.endX,control.hit.endY,control.hit.endZ)
-        fontDraw(data.font["default"],17.0,control.window[2]-197.0,l_text)
+        fontDraw(data.font["default"],17.0,control.window[2]-197.0,l_text, 1,1,1,1)
         l_text = string.format("RayCast normal: %.4f,%.4f,%.4f",control.hit.normalX,control.hit.normalY,control.hit.normalZ)
-        fontDraw(data.font["default"],17.0,control.window[2]-217.0,l_text)
+        fontDraw(data.font["default"],17.0,control.window[2]-217.0,l_text, 1,1,1,1)
         if(type(control.hit.model) == "userdata") then
             l_text = "RayCast object: "..getElementType(control.hit.model).." -> "..tostring(control.hit.model)
         elseif(type(control.hit.model) == "string") then
             l_text = "RayCast object: "..control.hit.model
         end
-        fontDraw(data.font["default"],17.0,control.window[2]-237.0,l_text)
+        fontDraw(data.font["default"],17.0,control.window[2]-237.0,l_text, 1,1,1,1)
     else
-        fontDraw(data.font["default"],17.0,control.window[2]-197.0,"RayCast end: No hit")
+        fontDraw(data.font["default"],17.0,control.window[2]-197.0,"RayCast end: No hit", 1,1,1,1)
     end
     if(control.console.visible == true) then
-        fontDraw(data.font["console"],8.0,4.0,"> "..control.console.text.."_")
+        fontDraw(data.font["console"],8.0,4.0,"> "..control.console.text.."_", 1,1,1,1)
     end
     --fontDraw(data.font["meiryo"],32,256,"これは日本語でサンプルテキストです。")
     --fontDraw(data.font["meiryo"],32,224,"這是德國的示例文本")
