@@ -71,7 +71,7 @@ end
 function rendering.stage.gui()
     
     local l_bgmTime = soundGetTime(data.sound["background"])
-    local l_bgmState = control.strings.bgm.state[soundGetState(data.sound["background"])]
+    local l_bgmState = soundGetState(data.sound["background"])
     
     oglClear("depth")
     
