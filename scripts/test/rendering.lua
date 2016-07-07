@@ -91,11 +91,11 @@ function rendering.stage.gui()
                 dx,dy = (mx-control.camera.position.x)*4.0,(my-control.camera.position.z)*4.0
                 if(not(math.abs(dx) > l_delta or math.abs(dy) > l_delta)) then
                     local l_mType = modelGetType(vv)
-                    if(l_mType == 0) then
+                    if(l_mType == "none") then
                         textureDraw(data.texture.radar.none,128+dx-10,128-dy-10,20,20, ry)
-                    elseif(l_mType == 1) then
+                    elseif(l_mType == "static") then
                         textureDraw(data.texture.radar.static,128+dx-10,128-dy-10,20,20, ry)
-                    elseif(l_mType == 2) then
+                    elseif(l_mType == "animated") then
                         textureDraw(data.texture.radar.rig,128+dx-10,128-dy-10,20,20, ry)
                     end
                 end
@@ -106,11 +106,11 @@ function rendering.stage.gui()
             dx,dy = (mx-control.camera.position.x)*4.0,(my-control.camera.position.z)*4.0
             if(not(math.abs(dx) > l_delta or math.abs(dy) > l_delta)) then
                 local l_mType = modelGetType(v)
-                if(l_mType == 0) then
+                if(l_mType == "none") then
                     textureDraw(data.texture.radar.none,128+dx-10,128-dy-10,20,20, ry)
-                elseif(l_mType == 1) then
+                elseif(l_mType == "static") then
                     textureDraw(data.texture.radar.static,128+dx-10,128-dy-10,20,20, ry)
-                elseif(l_mType == 2) then
+                elseif(l_mType == "animated") then
                     textureDraw(data.texture.radar.rig,128+dx-10,128-dy-10,20,20, ry)
                 end
             end
