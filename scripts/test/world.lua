@@ -25,7 +25,7 @@ function world.update()
     
     soundSetSpeed(data.sound["background"],2.0*math.abs(l_cosTick))
     
-    soundSetListener3DOrientation(
+    soundSetListenerOrientation(
         control.camera.position.x,control.camera.position.y,control.camera.position.z,
         control.camera.direction.x,control.camera.direction.y,control.camera.direction.z,
         control.camera.up.x,control.camera.up.y,control.camera.up.z
