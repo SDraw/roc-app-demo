@@ -23,8 +23,6 @@ function world.update()
     modelSetPosition(data.model["cube"],-4.0,2.0,-3.0*l_cosTick)
     modelSetRotation(data.model["cube"],0.0,l_rot,0.0)
     
-    soundSetSpeed(data.sound["background"],2.0*math.abs(l_cosTick))
-    
     soundSetListenerOrientation(
         control.camera.position.x,control.camera.position.y,control.camera.position.z,
         control.camera.direction.x,control.camera.direction.y,control.camera.direction.z,
