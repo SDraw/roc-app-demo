@@ -15,10 +15,6 @@ control.samples = 2.0
 control.locked = true
 control.physics = false
 control.distance = 0.1
-control.cursor = cursorCreate("textures/cursor.png")
-control.strings = {}
-control.strings.bgm = {}
-control.strings.bgm.state = { "Stopped", "Paused", "Playing" }
 control.console = {}
 control.console.text = ""
 control.console.previous = ""
@@ -30,15 +26,10 @@ control.grab.state = false
 control.grab.model = false
 control.grab.distance = 0.0
 
-local g_curPos = { x = false, y = false }
 function control.mouseMovement(xpos,ypos)
-    if(g_curPos.x == false or g_curPos.y == false) then
-        g_curPos.x,g_curPos.y = xpos,ypos
-        return
-    end
     if(control.locked) then
-        control.camera.angle[1] = math.fmod(control.camera.angle[1]+(xpos-g_curPos.x)/(math.pi*128.0),math.pi*2.0)
-        control.camera.angle[2] = control.camera.angle[2]-(ypos-g_curPos.y)/(math.pi*128.0)
+        control.camera.angle[1] = math.fmod(control.camera.angle[1]+xpos/(math.pi*128.0),math.pi*2.0)
+        control.camera.angle[2] = control.camera.angle[2]-ypos/(math.pi*128.0)
         if(control.camera.angle[2] > math.pi/2.0-0.005) then
             control.camera.angle[2] = math.pi/2.0-0.005
         elseif(control.camera.angle[2] < -math.pi/2.0+0.005) then
@@ -51,8 +42,6 @@ function control.mouseMovement(xpos,ypos)
         f_cosf = math.cos(control.camera.angle[2]+math.pi/2.0)
         control.camera.up.x,control.camera.up.y,control.camera.up.z = f_cosf*math.cos(control.camera.angle[1]),math.sin(control.camera.angle[2]+math.pi/2.0),f_cosf*math.sin(control.camera.angle[1])
     end
-    
-    g_curPos.x,g_curPos.y = xpos,ypos
 end
 addEvent("onCursorMove",control.mouseMovement)
 
@@ -62,41 +51,41 @@ function control.windowResize(width,height)
 end
 addEvent("onWindowResize",control.windowResize)
 
-function control.keyPressing(key,scan,action,mod)
+function control.keyPressing(key,action)
     if(control.console.visible == true) then return end
     if(action ~= 2) then
-        if(key == 87) then --W
+        if(key == 22) then --W
             control.forward = (action == 1)
             return
-        elseif(key == 83) then --S
+        elseif(key == 18) then --S
             control.backward = (action == 1)
             return
-        elseif(key == 68) then --D
+        elseif(key == 3) then --D
             control.right = (action == 1)
             return
-        elseif(key == 65) then --A
+        elseif(key == 0) then --A
             control.left = (action == 1)
             return
         end
         if(action == 1) then
-            if(key == 73) then -- I
+            if(key == 8) then -- I
                 modelResetAnimation(data.model.miku)
                 return
-            elseif(key == 80) then -- P
+            elseif(key == 15) then -- P
                 modelPlayAnimation(data.model.miku)
                 return
-            elseif(key == 79) then -- o
+            elseif(key == 14) then -- O
                 modelPauseAnimation(data.model.miku)
                 return
             end
-            if(key == 90) then --Z
+            if(key == 25) then --Z
                 control.samples = control.samples-1.0
                 if(control.samples < 0.0) then
                     control.samples = 0.0
                 end
                 shaderSetUniformValue(data.shader.default.element,data.shader.default.shadowSamplesUniform,"float",control.samples)
                 return
-            elseif(key == 88) then--X
+            elseif(key == 23) then --X
                 control.samples = control.samples+1.0
                 if(control.samples > 4.0) then
                     control.samples = 4.0
@@ -104,32 +93,31 @@ function control.keyPressing(key,scan,action,mod)
                 shaderSetUniformValue(data.shader.default.element,data.shader.default.shadowSamplesUniform,"float",control.samples)
                 return
             end
-            if(key == 342) then
+            if(key == 39) then -- Left Alt
                 control.locked = not control.locked
                 if(control.locked) then
                     setCursorMode("disabled")
                 else
                     setCursorMode("normal")
                 end
-                g_curPos.x,g_curPos.y = getCursorPosition()
                 return
             end
-            if(key == 67) then --C
+            if(key == 2) then --C
                 soundPlay(data.sound.background)
                 return
-            elseif(key == 86) then --V
+            elseif(key == 21) then --V
                 soundPause(data.sound.background)
                 return
-            elseif(key == 66) then
+            elseif(key == 1) then --B
                 soundStop(data.sound.background)
                 return
             end
-            if(key == 78) then --N
+            if(key == 13) then --N
                 control.physics = not control.physics
                 physicsSetEnabled(control.physics)
                 return
             end
-            if(key == 81) then --Q
+            if(key == 16) then --Q
                 local vx,vy,vz = 0.0,0.0,0.0
                 for _,v in ipairs(data.model.rigid_body) do
                     vx,vy,vz = modelGetVelocity(v)
@@ -140,15 +128,15 @@ function control.keyPressing(key,scan,action,mod)
                 end
                 return
             end
-            if(key == 340) then
+            if(key == 38) then -- Left Shift
                 control.distance = 0.5
                 return
             end
-            if(key == 256) then
+            if(key == 36) then
                 closeApplication()
                 return
             end
-            if(key == 96) then
+            if(key == 54) then
                 control.console.visible = true
                 addEvent("onKeyPress",control.consoleInputKey)
                 addEvent("onTextInput",control.consoleInputText)
@@ -157,7 +145,7 @@ function control.keyPressing(key,scan,action,mod)
         end
     end
     if(action == 0) then
-        if(key == 340) then
+        if(key == 38) then
             control.distance = 0.05
         end
     end
@@ -203,9 +191,9 @@ function control.consoleInputText(str1)
     end
     control.console.text = control.console.text..str1
 end
-function control.consoleInputKey(key,scan,action,mod)
+function control.consoleInputKey(key,action)
     if(action == 1) then
-        if(key == 256) then
+        if(key == 36) then -- Escape
             control.console.visible = false
             control.console.bug = true
             removeEvent("onKeyPress",control.consoleInputKey)
@@ -213,21 +201,20 @@ function control.consoleInputKey(key,scan,action,mod)
             control.console.text = ""
             return
         end
-        if(key == 257) then
-            --do something
+        if(key == 58) then -- Return
             if(control.console.text:len() == 0) then return end
             load(control.console.text)()
             control.console.previous = control.console.text
             control.console.text = ""
             return
         end
-        if(key == 265) then
+        if(key == 73) then -- Arrow up
             control.console.text = control.console.previous
             return
         end
     end
     if(action == 1 or action == 2) then
-        if(key == 259) then
+        if(key == 59) then
             local l_textLen = utf8.len(control.console.text)
             if(l_textLen > 0) then
                 control.console.text = utf8.sub(control.console.text,0,l_textLen-1)
@@ -276,35 +263,31 @@ function control.updateTime()
     control.tick = getTime()
 end
 
-function control.joystick(jnum,jbuttons,jaxes)
-    if(jnum == 0) then
-        --print("> Joystick number",jnum,"name",jname)
-        --for k,v in ipairs(jbuttons) do
-        --    print("Button",k,"state",v)
-        --end
-        --for k,v in ipairs(jaxes) do
-        --    print("Axis",k,"state",v)
-        --end
-        local l_x,l_y,l_z = 0.0,0.0,0.0
-        if(not(jaxes[1] < 0.0 and jaxes[1] > -0.001)) then
-            l_x = jaxes[1]
-        end
-        if(not(jaxes[2] < 0.0 and jaxes[2] > -0.001)) then
-            l_z = jaxes[2]
-        end
-        if(not(jaxes[3] < 0.0 and jaxes[3] > -0.001)) then
-            l_y = -jaxes[3]
-        end
-        if(not(l_x == 0.0 and l_y == 0.0 and l_z == 0.0)) then
-            local l_own_x,l_own_y,l_own_z = modelGetVelocity(data.model.rigid_body[#data.model.rigid_body])
-            l_x = l_x+l_own_x
-            l_y = l_y+l_own_y
-            l_z = l_z+l_own_z
-            modelSetVelocity(data.model.rigid_body[#data.model.rigid_body],l_x,l_y,l_z)
-        end
+control.joypad = {}
+
+function control.joypad.connect(jid,state)
+    if(state == 1) then
+        addEvent("onJoypadButton",control.joypad.button)
+        addEvent("onJoypadAxis",control.joypad.axis)
+        print("Joypad connected",jid,state)
+    else
+        removeEvent("onJoypadButton",control.joypad.button)
+        removeEvent("onJoypadAxis",control.joypad.axis)
+        print("Joypad disconnected",jid,state)
     end
 end
-addEvent("onJoypadEvent",control.joystick)
+addEvent("onJoypadConnect",control.joypad.connect)
 
-setCursor(control.cursor)
+function control.joypad.button(jid,jbutton,jstate)
+    print("onJoypadButton",jid,jbutton,jstate)
+    if(jid == 0 and jbutton == 0 and jstate == 1) then
+        local l_x,l_y,l_z = modelGetVelocity(data.model.rigid_body[#data.model.rigid_body])
+        l_y = l_y+9.8
+        modelSetVelocity(data.model.rigid_body[#data.model.rigid_body],l_x,l_y,l_z)
+    end
+end
+function control.joypad.axis(jid,jaxis,jvalue)
+    print("onJoypadAxis",jid,jaxis,jvalue)
+end
+
 setCursorMode("disabled")

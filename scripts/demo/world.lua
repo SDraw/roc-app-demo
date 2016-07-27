@@ -49,6 +49,3 @@ end
 addEvent("onOGLPreRender",world.update)
 
 physicsSetFloorEnabled(true)
-
---modelSetAnimationSpeed(data.model.brocoli,50.0)
---modelSetAnimationSpeed(data.model.tama[1],50.0)
