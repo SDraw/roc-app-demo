@@ -9,8 +9,7 @@ lightSetParams(data.scene.main.light,0.5,1.0,0.5,16.0)
 lightSetColor(data.scene.main.light,0.811764,0.862745,0.996078)
 lightSetDirection(data.scene.main.light,-0.707106,-0.707106,0.0)
 
-data.scene.main.camera = cameraCreate()
-cameraSetType(data.scene.main.camera,"perspective")
+data.scene.main.camera = cameraCreate("perspective")
 cameraSetPosition(data.scene.main.camera,0.0,5.0,20.0)
 cameraSetDirection(data.scene.main.camera,0.0,0.0,-1.0)
 cameraSetFOV(data.scene.main.camera,math.pi/4)
@@ -25,8 +24,7 @@ data.scene.shadow = {}
 
 data.scene.shadow.scene = sceneCreate()
 
-data.scene.shadow.camera = cameraCreate()
-cameraSetType(data.scene.shadow.camera,"orthogonal")
+data.scene.shadow.camera = cameraCreate("orthogonal")
 cameraSetPosition(data.scene.shadow.camera,0.0,0.0,0.0)
 cameraSetDirection(data.scene.shadow.camera,-0.707106,-0.707106,0.0)
 cameraSetOrthoSize(data.scene.shadow.camera,-16.0,16.0,-16.0,16.0)
