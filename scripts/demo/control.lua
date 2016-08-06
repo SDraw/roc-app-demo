@@ -46,7 +46,7 @@ end
 addEvent("onCursorMove",control.mouseMovement)
 
 function control.windowResize(width,height)
-    cameraSetPerspectiveSize(data.scene.main.camera,width,height)
+    cameraSetAspectRatio(data.scene.main.camera,width/height)
     control.window[1],control.window[2] = width,height
 end
 addEvent("onWindowResize",control.windowResize)
