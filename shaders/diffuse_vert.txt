@@ -16,10 +16,7 @@ uniform mat4 gProjectionMatrix;
 uniform mat4 gViewMatrix;
 uniform mat4 gModelMatrix;
 uniform bool gAnimated;
-layout (std140) uniform gBonesData
-{
-  mat4 gBoneMatrix[255];
-};
+uniform mat4 gBoneMatrix[128];
 
 //Custom variables
 uniform mat4 gShadowViewMatrix;
