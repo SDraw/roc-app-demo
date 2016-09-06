@@ -43,9 +43,7 @@ function control.mouseMovement(xpos,ypos)
         f_cosf = math.cos(control.camera.angle[2]+math.pi/2.0)
         control.camera.up.x,control.camera.up.y,control.camera.up.z = f_cosf*math.cos(control.camera.angle[1]),math.sin(control.camera.angle[2]+math.pi/2.0),f_cosf*math.sin(control.camera.angle[1])
         
-        if(l_difx ~= 0 or l_dify ~= 0) then
-            setCursorPosition(math.floor(control.window[1]/2),math.floor(control.window[2]/2))
-        end
+        setCursorPosition(math.floor(control.window[1]/2),math.floor(control.window[2]/2))
     end
 end
 addEvent("onCursorMove",control.mouseMovement)
