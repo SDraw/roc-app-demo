@@ -56,37 +56,37 @@ addEvent("onWindowResize",control.windowResize)
 
 function control.keyPressing(key,action)
     if(control.console.visible == true) then return end
-    if(key == 22) then --W
+    if(key == "w") then --W
         control.forward = (action == 1)
-    elseif(key == 18) then --S
+    elseif(key == "s") then --S
         control.backward = (action == 1)
-    elseif(key == 3) then --D
+    elseif(key == "d") then --D
         control.right = (action == 1)
-    elseif(key == 0) then --A
+    elseif(key == "a") then --A
         control.left = (action == 1)
     end
     if(action == 1) then
-        if(key == 8) then -- I
+        if(key == "i") then -- I
             modelResetAnimation(data.model.miku)
-        elseif(key == 15) then -- P
+        elseif(key == "p") then -- P
             modelPlayAnimation(data.model.miku)
-        elseif(key == 14) then -- O
+        elseif(key == "o") then -- O
             modelPauseAnimation(data.model.miku)
         ----
-        elseif(key == 25) then --Z
+        elseif(key == "z") then --Z
             control.samples = control.samples-1.0
             if(control.samples < 0.0) then
                 control.samples = 0.0
             end
             shaderSetUniformValue(data.shader.default.element,data.shader.default.shadowSamplesUniform,"float",control.samples)
-        elseif(key == 23) then --X
+        elseif(key == "x") then --X
             control.samples = control.samples+1.0
             if(control.samples > 4.0) then
                 control.samples = 4.0
             end
             shaderSetUniformValue(data.shader.default.element,data.shader.default.shadowSamplesUniform,"float",control.samples)
         ----
-        elseif(key == 39) then -- Left Alt
+        elseif(key == "lalt") then -- Left Alt
             control.locked = not control.locked
             if(control.locked) then
                 setCursorMode("hl")
@@ -94,18 +94,18 @@ function control.keyPressing(key,action)
                 setCursorMode("vu")
             end
         ----
-        elseif(key == 2) then --C
+        elseif(key == "c") then --C
             soundPlay(data.sound.background)
-        elseif(key == 21) then --V
+        elseif(key == "v") then --V
             soundPause(data.sound.background)
-        elseif(key == 1) then --B
+        elseif(key == "b") then --B
             soundStop(data.sound.background)
         ----
-        elseif(key == 13) then --N
+        elseif(key == "n") then --N
             control.physics = not control.physics
             physicsSetEnabled(control.physics)
         ----
-        elseif(key == 16) then --Q
+        elseif(key == "q") then --Q
             local vx,vy,vz = 0.0,0.0,0.0
             for _,v in ipairs(data.model.rigid_body) do
                 vx,vy,vz = modelGetVelocity(v)
@@ -115,19 +115,19 @@ function control.keyPressing(key,action)
                 end
             end
         ----
-        elseif(key == 38) then -- Left Shift
+        elseif(key == "lshift") then -- Left Shift
             control.distance = 0.5
         ----
-        elseif(key == 36) then
+        elseif(key == "esc") then
             closeApplication()
         ----
-        elseif(key == 54) then
+        elseif(key == "tilde") then
             control.console.visible = true
             addEvent("onKeyPress",control.consoleInputKey)
             addEvent("onTextInput",control.consoleInputText) 
         end
     elseif(action == 0) then
-        if(key == 38) then
+        if(key == "lshift") then
             control.distance = 0.05
         end
     end
@@ -136,7 +136,7 @@ addEvent("onKeyPress",control.keyPressing)
 
 function control.fire(key,action,mod)
     if(control.locked == true) then
-        if(key == 0 and action == 1) then
+        if(key == "left" and action == 1) then
             if(control.hit.endX and type(control.hit.model) == "userdata") then
                 if(getElementType(control.hit.model) == "model") then
                     modelSetVelocity(control.hit.model,control.camera.direction.x*20.0,control.camera.direction.y*20.0,control.camera.direction.z*20.0)
@@ -149,7 +149,7 @@ addEvent("onMouseKeyPress",control.fire)
 
 function control.grab.func(key,action,mod)
     if(control.locked == true) then
-        if(key == 1 and action == 1) then
+        if(key == "right" and action == 1) then
             if(control.grab.state == false and type(control.hit.model) == "userdata" and getElementType(control.hit.model) == "model") then
                 control.grab.state = true
                 control.grab.model = control.hit.model
@@ -175,20 +175,20 @@ function control.consoleInputText(str1)
 end
 function control.consoleInputKey(key,action)
     if(action == 1) then
-        if(key == 36) then -- Escape
+        if(key == "esc") then -- Escape
             control.console.visible = false
             control.console.bug = true
             removeEvent("onKeyPress",control.consoleInputKey)
             removeEvent("onTextInput",control.consoleInputText)
             control.console.text = ""
-        elseif(key == 58) then -- Return
+        elseif(key == "return") then -- Return
             if(control.console.text:len() == 0) then return end
             load(control.console.text)()
             control.console.previous = control.console.text
             control.console.text = ""
-        elseif(key == 73) then -- Arrow up
+        elseif(key == "arrow_u") then -- Arrow up
             control.console.text = control.console.previous
-        elseif(key == 59) then
+        elseif(key == "backspace") then
             local l_textLen = utf8.len(control.console.text)
             if(l_textLen > 0) then
                 control.console.text = utf8.sub(control.console.text,0,l_textLen-1)
