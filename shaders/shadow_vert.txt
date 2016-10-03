@@ -9,7 +9,7 @@ uniform mat4 gModelMatrix;
 uniform bool gAnimated;
 layout (std140) uniform gBonesUniform
 {
-    mat4 gBoneMatrix[255];
+    mat4 gBoneMatrix[227];
 };
 
 void main()
