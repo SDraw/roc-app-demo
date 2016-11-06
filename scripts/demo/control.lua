@@ -263,4 +263,9 @@ function control.joypad.axis(jid,jaxis,jvalue)
     print("onJoypadAxis",jid,jaxis,jvalue)
 end
 
+if(isJoypadConnected(0)) then
+    addEvent("onJoypadButton",control.joypad.button)
+    addEvent("onJoypadAxis",control.joypad.axis)
+end
+
 setCursorMode("hl")
