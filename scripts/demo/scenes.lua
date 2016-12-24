@@ -6,7 +6,7 @@ data.scene.main.scene = sceneCreate()
 
 data.scene.main.light = lightCreate()
 lightSetParams(data.scene.main.light,0.5,1.0,0.5,16.0)
-lightSetColor(data.scene.main.light,0.811764,0.862745,0.996078)
+lightSetColor(data.scene.main.light,1.0,1.0,1.0)
 lightSetDirection(data.scene.main.light,-0.707106,-0.707106,0.0)
 
 data.scene.main.camera = cameraCreate("perspective")

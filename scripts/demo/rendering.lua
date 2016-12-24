@@ -34,10 +34,6 @@ function rendering.stage.main()
     for _,v in ipairs(data.model.rigid_body) do
         modelDraw(v,true,true,2)
     end
-    
-    setActiveShader(data.shader.cloud)
-    setActiveScene(data.scene.main.scene)
-    modelDraw(data.model.cube,true,true,2)
 end
 function rendering.stage.gui()
     

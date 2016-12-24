@@ -19,9 +19,6 @@ function world.update()
     modelSetPosition(data.model.skybox,control.camera.position.x,control.camera.position.y,control.camera.position.z)
     
     local l_cosTick = math.cos(control.tick)
-    local l_rot = math.fmod(control.tick,math.pi*2.0)
-    modelSetPosition(data.model.cube,-4.0,2.0,-3.0*l_cosTick)
-    modelSetRotation(data.model.cube,0.0,l_rot,0.0)
     
     soundSetSpeed(data.sound.background,2.0*math.abs(l_cosTick))
     

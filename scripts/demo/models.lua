@@ -45,5 +45,3 @@ end
 
 data.model.rope = modelCreate(data.geometry.rope)
 modelSetPosition(data.model.rope,-12.0,2.0,-8.0)
-
-data.model.cube = modelCreate(data.geometry.cube_cloud)

@@ -1,4 +1,4 @@
-#version 330
+#version 330 core
 in vec2 tUV;
 out vec4 gOutput;
 

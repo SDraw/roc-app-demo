@@ -1,9 +1,9 @@
 data.shader = {}
 
-data.shader.shadow = shaderCreate("shaders/shadow_vert.txt","shaders/shadow_frag.txt")
+data.shader.shadow = shaderCreate("shaders/shadow_vert.glsl","shaders/shadow_frag.glsl")
 
 data.shader.default = {}
-data.shader.default.element = shaderCreate("shaders/diffuse_vert.txt","shaders/irradiance_frag.txt")
+data.shader.default.element = shaderCreate("shaders/diffuse_vert.glsl","shaders/irradiance_frag.glsl")
 data.shader.default.shadowTextureUniform = shaderGetUniform(data.shader.default.element,"gTexture3")
 shaderSetUniformValue(data.shader.default.element,data.shader.default.shadowTextureUniform,"target",data.target.shadow)
 
@@ -19,9 +19,5 @@ shaderSetUniformValue(data.shader.default.element,data.shader.default.shadowProj
 data.shader.default.shadowSamplesUniform = shaderGetUniform(data.shader.default.element,"gShadowSamples")
 shaderSetUniformValue(data.shader.default.element,data.shader.default.shadowSamplesUniform,"float",2.0)
 
-data.shader.text = shaderCreate("shaders/text_vert.txt","shaders/text_frag.txt")
-
-data.shader.cloud = shaderCreate("shaders/cloud_vert.txt","shaders/cloud_frag.txt")
-
-data.shader.texture = shaderCreate("shaders/texture_vert.txt","shaders/texture_frag.txt")
-
+data.shader.text = shaderCreate("shaders/text_vert.glsl","shaders/text_frag.glsl")
+data.shader.texture = shaderCreate("shaders/texture_vert.glsl","shaders/texture_frag.glsl")
