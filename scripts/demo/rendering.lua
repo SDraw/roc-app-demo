@@ -12,7 +12,6 @@ function rendering.stage.shadow()
     
     modelDraw(data.model.plane,false,true,23)
     modelDraw(data.model.miku,false,true,10)
-    modelDraw(data.model.rope,false,true,5)
     for _,v in ipairs(data.model.rigid_body) do
         modelDraw(v,false,true,2)
     end

@@ -18,10 +18,6 @@ function world.update()
     ----
     modelSetPosition(data.model.skybox,control.camera.position.x,control.camera.position.y,control.camera.position.z)
     
-    local l_cosTick = math.cos(control.tick)
-    
-    soundSetSpeed(data.sound.background,2.0*math.abs(l_cosTick))
-    
     soundSetListenerOrientation(
         control.camera.position.x,control.camera.position.y,control.camera.position.z,
         control.camera.direction.x,control.camera.direction.y,control.camera.direction.z,

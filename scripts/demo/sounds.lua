@@ -1,3 +1,8 @@
 data.sound = {}
 
-data.sound.background = soundCreate("sound/bgm01.ogg",true)
+data.sound.background = soundCreate("sound/magical.ogg",true)
+
+function data.sound.init()
+    soundPlay(data.sound.background)
+end
+addEvent("onAppStart",data.sound.init)
