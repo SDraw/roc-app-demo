@@ -108,10 +108,10 @@ function control.keyPressing(key,action)
         elseif(key == "q") then --Q
             local vx,vy,vz = 0.0,0.0,0.0
             for _,v in ipairs(data.model.rigid_body) do
-                vx,vy,vz = modelGetVelocity(v)
+                vx,vy,vz = modelGetCollisionProperty(v,"velocity")
                 if(vx ~= false) then
                     vy = vy+9.8
-                    modelSetVelocity(v,vx,vy,vz)
+                    modelSetCollisionProperty(v,"velocity",vx,vy,vz)
                 end
             end
         ----
@@ -139,7 +139,7 @@ function control.fire(key,action,mod)
         if(key == "left" and action == 1) then
             if(control.hit.endX and type(control.hit.model) == "userdata") then
                 if(getElementType(control.hit.model) == "model") then
-                    modelSetVelocity(control.hit.model,control.camera.direction.x*20.0,control.camera.direction.y*20.0,control.camera.direction.z*20.0)
+                    modelSetCollisionProperty(control.hit.model,"velocity",control.camera.direction.x*20.0,control.camera.direction.y*20.0,control.camera.direction.z*20.0)
                 end
             end
         end
@@ -254,9 +254,9 @@ addEvent("onJoypadConnect",control.joypad.connect)
 function control.joypad.button(jid,jbutton,jstate)
     print("onJoypadButton",jid,jbutton,jstate)
     if(jid == 0 and jbutton == 0 and jstate == 1) then
-        local l_x,l_y,l_z = modelGetVelocity(data.model.rigid_body[#data.model.rigid_body])
+        local l_x,l_y,l_z = modelGetCollisionProperty(data.model.rigid_body[#data.model.rigid_body],"velocity")
         l_y = l_y+9.8
-        modelSetVelocity(data.model.rigid_body[#data.model.rigid_body],l_x,l_y,l_z)
+        modelSetCollisionProperty(data.model.rigid_body[#data.model.rigid_body],"velocity",l_x,l_y,l_z)
     end
 end
 function control.joypad.axis(jid,jaxis,jvalue)

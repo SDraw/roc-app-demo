@@ -40,9 +40,10 @@ function world.update()
             control.camera.position.y+control.camera.direction.y*control.grab.distance,
             control.camera.position.z+control.camera.direction.z*control.grab.distance
         )
-        modelSetVelocity(control.grab.model,0.0,0.0,0.0)
+        modelSetCollisionProperty(control.grab.model,"velocity",0.0,0.0,0.0)
     end
 end
 addEvent("onOGLPreRender",world.update)
 
 physicsSetFloorEnabled(true)
+physicsSetEnabled(true)

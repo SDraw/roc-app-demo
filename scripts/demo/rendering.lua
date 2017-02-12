@@ -30,7 +30,6 @@ function rendering.stage.main()
     
     modelDraw(data.model.plane,true,true,23)
     modelDraw(data.model.miku,true,true,10)
-    modelDraw(data.model.rope,true,true,5)
     for _,v in ipairs(data.model.rigid_body) do
         modelDraw(v,true,true,2)
     end
@@ -40,52 +39,11 @@ function rendering.stage.gui()
     local l_bgmTime = soundGetTime(data.sound.background)
     local l_bgmState = soundGetState(data.sound.background)
     
-    oglClear("depth")
-    
-    setActiveShader(data.shader.texture)
-    textureDraw(data.texture.logo,10,16,256,36, 0, 1,1,1,0.75)
-    setRenderTarget(data.target.radar)
-    oglClear("color")
-    oglClear("depth")
-    local dx,dy = 0.0,0.0
-    local l_delta = math.sqrt(128*128+128*128)
-    local l_rotTick = math.pi*math.cos(control.tick)
-    for _,v in pairs(data.model) do
-        if(type(v) == "table") then
-            for _,vv in pairs(v) do
-                local mx,_,my = modelGetPosition(vv,true)
-                local _,ry,_ = modelGetRotation(vv,true)
-                dx,dy = (mx-control.camera.position.x)*4.0,(my-control.camera.position.z)*4.0
-                if(not(math.abs(dx) > l_delta or math.abs(dy) > l_delta)) then
-                    local l_mType = modelGetType(vv)
-                    if(l_mType == "none") then
-                        textureDraw(data.texture.radar.none,128+dx-10,128-dy-10,20,20, ry)
-                    elseif(l_mType == "static") then
-                        textureDraw(data.texture.radar.static,128+dx-10,128-dy-10,20,20, ry)
-                    elseif(l_mType == "animated") then
-                        textureDraw(data.texture.radar.rig,128+dx-10,128-dy-10,20,20, ry)
-                    end
-                end
-            end
-        elseif(type(v) == "userdata") then
-            local mx,_,my = modelGetPosition(v,true)
-            local _,ry,_ = modelGetRotation(v,true)
-            dx,dy = (mx-control.camera.position.x)*4.0,(my-control.camera.position.z)*4.0
-            if(not(math.abs(dx) > l_delta or math.abs(dy) > l_delta)) then
-                local l_mType = modelGetType(v)
-                if(l_mType == "none") then
-                    textureDraw(data.texture.radar.none,128+dx-10,128-dy-10,20,20, ry)
-                elseif(l_mType == "static") then
-                    textureDraw(data.texture.radar.static,128+dx-10,128-dy-10,20,20, ry)
-                elseif(l_mType == "animated") then
-                    textureDraw(data.texture.radar.rig,128+dx-10,128-dy-10,20,20, ry)
-                end
-            end
-        end
-    end
-    textureDraw(data.texture.radar.circle,0,0,256,256)
     setRenderTarget()
-    rtDraw(data.target.radar,control.window[1]-256,control.window[2]-256,256.0,256.0)
+    oglClear("depth")
+    setActiveShader(data.shader.texture)
+    
+    textureDraw(data.texture.logo,10,16,256,36, 0, 1,1,1,0.75)
     if(control.console.visible == true) then
         textureDraw(data.texture.box,0,0,control.window[1],16)
     end
@@ -162,11 +120,6 @@ function rendering.stage.gui()
     if(control.console.visible == true) then
         fontDraw(data.font.console,8.0,4.0,"> "..control.console.text.."_")
     end
-    --fontDraw(data.font["meiryo"],32,256,"これは日本語でサンプルテキストです。")
-    --fontDraw(data.font["meiryo"],32,224,"這是德國的示例文本")
-    --fontDraw(data.font["meiryo"],32,192,"Este es el texto en español")
-    --fontDraw(data.font["meiryo"],32,160,"Это образец текста на русском языке")
-    --fontDraw(data.font["meiryo"],32,128,"This is sample text in English")
 end
 addEvent("onOGLRender",rendering.stage.shadow)
 addEvent("onOGLRender",rendering.stage.main)
