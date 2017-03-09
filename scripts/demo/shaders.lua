@@ -5,10 +5,10 @@ data.shader.shadow = shaderCreate("shaders/shadow_vert.glsl","shaders/shadow_fra
 data.shader.default = {}
 data.shader.default.element = shaderCreate("shaders/diffuse_vert.glsl","shaders/irradiance_frag.glsl")
 data.shader.default.shadowTextureUniform = shaderGetUniform(data.shader.default.element,"gTexture3")
-shaderSetUniformValue(data.shader.default.element,data.shader.default.shadowTextureUniform,"target",data.target.shadow)
+shaderSetUniformValue(data.shader.default.element,data.shader.default.shadowTextureUniform,"drawable",data.target.shadow)
 
 data.shader.default.irradianceUniform = shaderGetUniform(data.shader.default.element,"gTexture5")
-shaderSetUniformValue(data.shader.default.element,data.shader.default.irradianceUniform,"texture",data.texture.irradiance)
+shaderSetUniformValue(data.shader.default.element,data.shader.default.irradianceUniform,"drawable",data.texture.irradiance)
 
 data.shader.default.shadowViewMatrixUniform = shaderGetUniform(data.shader.default.element,"gShadowViewMatrix")
 shaderSetUniformValue(data.shader.default.element,data.shader.default.shadowViewMatrixUniform,"mat4",cameraGetViewMatrix(data.scene.shadow.camera))
