@@ -26,3 +26,5 @@ Demo scene resource for [RunOnCoal engine](https://github.com/SDraw/run-on-coal)
   * **Backspace:** remove last character.
   * **Arrow up:** get last interpreted code.
 * **Esc:** close application.
+
+* Note from 03.21.2017: Animation isn't working because of new animation type. Will be converted soon.
