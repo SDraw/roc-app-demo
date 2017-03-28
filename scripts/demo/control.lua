@@ -78,13 +78,13 @@ function control.keyPressing(key,action)
             if(control.samples < 0.0) then
                 control.samples = 0.0
             end
-            shaderSetUniformValue(data.shader.default.element,data.shader.default.shadowSamplesUniform,"float",control.samples)
+            shaderSetUniformValue(data.shader.default.element,"gShadowSamples","float",control.samples)
         elseif(key == "x") then --X
             control.samples = control.samples+1.0
             if(control.samples > 4.0) then
                 control.samples = 4.0
             end
-            shaderSetUniformValue(data.shader.default.element,data.shader.default.shadowSamplesUniform,"float",control.samples)
+            shaderSetUniformValue(data.shader.default.element,"gShadowSamples","float",control.samples)
         ----
         elseif(key == "lalt") then -- Left Alt
             control.locked = not control.locked
