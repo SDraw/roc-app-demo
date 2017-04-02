@@ -1,32 +1,49 @@
-data.scene = {}
+scene = {}
 
-data.scene.main = {}
+function scene.init()
+    scene.main = {}
+    scene.main.scene = sceneCreate()
+    scene.main.light = lightCreate()
+    lightSetParams(scene.main.light,0.5,1.0,0.5,16.0)
+    lightSetColor(scene.main.light,1.0,1.0,1.0)
+    lightSetDirection(scene.main.light,-0.707106,-0.707106,0.0)
+    scene.main.camera = cameraCreate("perspective")
+    cameraSetPosition(scene.main.camera,0.0,5.0,20.0)
+    cameraSetDirection(scene.main.camera,0.0,0.0,-1.0)
+    cameraSetFOV(scene.main.camera,math.pi/4)
+    scene.main.temp = { getWindowSize() }
+    cameraSetAspectRatio(scene.main.camera,scene.main.temp[1]/scene.main.temp[2])
+    scene.main.temp = nil
+    cameraSetDepth(scene.main.camera,0.2,300.0)
+    sceneSetLight(scene.main.scene,scene.main.light)
+    sceneSetCamera(scene.main.scene,scene.main.camera)
+    addEvent("onWindowResize",scene.updateMainAspectRatio)
+    
+    scene.shadow = {}
+    scene.shadow.scene = sceneCreate()
+    scene.shadow.camera = cameraCreate("orthogonal")
+    cameraSetPosition(scene.shadow.camera,0.0,0.0,0.0)
+    cameraSetDirection(scene.shadow.camera,-0.707106,-0.707106,0.0)
+    cameraSetOrthoParams(scene.shadow.camera,-32.0,32.0,-32.0,32.0)
+    cameraSetDepth(scene.shadow.camera,-50.0,50.0)
+    sceneSetCamera(scene.shadow.scene,scene.shadow.camera)
+end
+addEvent("onAppStart",scene.init)
 
-data.scene.main.scene = sceneCreate()
+function scene.updateMainAspectRatio(width,height)
+    cameraSetAspectRatio(scene.main.camera,width/height)
+end
 
-data.scene.main.light = lightCreate()
-lightSetParams(data.scene.main.light,0.5,1.0,0.5,16.0)
-lightSetColor(data.scene.main.light,1.0,1.0,1.0)
-lightSetDirection(data.scene.main.light,-0.707106,-0.707106,0.0)
+function scene.getMainScene()
+    return scene.main.scene
+end
+function scene.getMainCamera()
+    return scene.main.camera
+end
 
-data.scene.main.camera = cameraCreate("perspective")
-cameraSetPosition(data.scene.main.camera,0.0,5.0,20.0)
-cameraSetDirection(data.scene.main.camera,0.0,0.0,-1.0)
-cameraSetFOV(data.scene.main.camera,math.pi/4)
-local l_tx,l_ty = getWindowSize()
-cameraSetAspectRatio(data.scene.main.camera,l_tx/l_ty)
-cameraSetDepth(data.scene.main.camera,0.2,300.0)
-
-sceneSetLight(data.scene.main.scene,data.scene.main.light)
-sceneSetCamera(data.scene.main.scene,data.scene.main.camera)
-
-data.scene.shadow = {}
-
-data.scene.shadow.scene = sceneCreate()
-
-data.scene.shadow.camera = cameraCreate("orthogonal")
-cameraSetPosition(data.scene.shadow.camera,0.0,0.0,0.0)
-cameraSetDirection(data.scene.shadow.camera,-0.707106,-0.707106,0.0)
-cameraSetOrthoParams(data.scene.shadow.camera,-16.0,16.0,-16.0,16.0)
-cameraSetDepth(data.scene.shadow.camera,-50.0,50.0)
-sceneSetCamera(data.scene.shadow.scene,data.scene.shadow.camera)
+function scene.getShadowScene()
+    return scene.shadow.scene
+end
+function scene.getShadowCamera()
+    return scene.shadow.camera
+end

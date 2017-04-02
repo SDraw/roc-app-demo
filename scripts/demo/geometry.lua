@@ -1,9 +1,16 @@
-data.geometry = {}
+geometry = {}
 
-data.geometry.skybox = geometryCreate("models/skybox.rmf")
-data.geometry.miku = geometryCreate("models/miku.rmf")
-data.geometry.plane = geometryCreate("models/plane.rmf")
-data.geometry.cube = geometryCreate("models/cube.rmf")
-data.geometry.cone = geometryCreate("models/cone.rmf")
-data.geometry.cylinder = geometryCreate("models/cylinder.rmf")
-data.geometry.sphere = geometryCreate("models/rigid_sphere.rmf")
+function geometry.init()
+    geometry.skybox = geometryCreate("models/skybox.rmf")
+    geometry.plane = geometryCreate("models/plane.rmf")
+    geometry.cube = geometryCreate("models/cube.rmf")
+    geometry.cone = geometryCreate("models/cone.rmf")
+    geometry.cylinder = geometryCreate("models/cylinder.rmf")
+    geometry.sphere = geometryCreate("models/icosphere.rmf")
+    geometry.rope = geometryCreate("models/rope.rmf")
+    geometry.clouds = geometryCreate("models/clouds.rmf")
+    geometry.water = geometryCreate("models/water_plane.rmf")
+    geometry.fire = geometryCreate("models/flame.rmf")
+    geometry.dummy = geometryCreate("models/dummy.rmf")
+end
+addEvent("onAppStart",geometry.init)

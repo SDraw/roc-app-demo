@@ -1,4 +1,9 @@
-data.animation = {}
+animation = {}
 
-data.animation.miku = {}
-data.animation.miku.dance = animationCreate("animations/miku_dance.raf")
+function animation.init()
+    animation.dummy = {
+        idle = animationCreate("animations/dummy_idle.raf"),
+        walk = animationCreate("animations/dummy_walk.raf")
+    }
+end
+addEvent("onAppStart",animation.init)

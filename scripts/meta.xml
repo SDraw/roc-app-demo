@@ -1,15 +1,16 @@
 <meta>
-    <script src="demo/data.lua"/>
-    <script src="demo/scenes.lua"/>
+    <script src="demo/window.lua"/>
     <script src="demo/fonts.lua"/>
     <script src="demo/textures.lua"/>
     <script src="demo/targets.lua"/>
     <script src="demo/shaders.lua"/>
     <script src="demo/animations.lua"/>
-    <script src="demo/sounds.lua"/>
-    <script src="demo/control.lua"/>
-    <script src="demo/rendering.lua"/>
     <script src="demo/geometry.lua"/>
     <script src="demo/models.lua"/>
+    <script src="demo/sounds.lua"/>
+    <script src="demo/scenes.lua"/>
+    <script src="demo/physics.lua"/>
+    <script src="demo/control.lua"/>
     <script src="demo/world.lua"/>
+    <script src="demo/render.lua"/>
 </meta>
