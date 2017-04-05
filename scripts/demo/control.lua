@@ -239,11 +239,11 @@ function control.onCursorMove(xpos,ypos)
         local l_difx,l_dify = xpos-math.floor(l_ww/2),ypos-math.floor(l_wh/2)
         if(l_difx ~= 0) then control.camera.angle[1] = fixAngle(control.camera.angle[1]-l_difx/g_cameraMoveFraction) end
         if(l_dify ~= 0) then control.camera.angle[2] = math.clamp(control.camera.angle[2]-l_dify/g_cameraMoveFraction,g_cameraDownDirectionLimit,g_cameraUpDirectionLimit) end
-        local f_cosf = math.cos(control.camera.angle[2])
-        control.camera.direction.x,control.camera.direction.y,control.camera.direction.z = f_cosf*math.sin(control.camera.angle[1]),math.sin(control.camera.angle[2]),f_cosf*math.cos(control.camera.angle[1])
+        local l_radius = math.cos(control.camera.angle[2])
+        control.camera.direction.x,control.camera.direction.y,control.camera.direction.z = l_radius*math.sin(control.camera.angle[1]),math.sin(control.camera.angle[2]),l_radius*math.cos(control.camera.angle[1])
         
-        f_cosf = math.cos(control.camera.angle[2]+math.pi/2.0)
-        control.camera.up.x,control.camera.up.y,control.camera.up.z = f_cosf*math.sin(control.camera.angle[1]),math.cos(control.camera.angle[2]),f_cosf*math.cos(control.camera.angle[1])
+        l_radius = math.cos(control.camera.angle[2]+math.pi/2.0)
+        control.camera.up.x,control.camera.up.y,control.camera.up.z = l_radius*math.sin(control.camera.angle[1]),math.cos(control.camera.angle[2]),l_radius*math.cos(control.camera.angle[1])
         
         setCursorPosition(math.floor(l_ww/2),math.floor(l_wh/2))
     end
@@ -310,7 +310,7 @@ function control.onOGLPreRender()
             local l_moveSpeed = (60.0/render.getFPS())*0.0625
             player.position.x,player.position.z = player.position.x+l_moveSpeed*math.sin(player.movement.rotation),player.position.z+l_moveSpeed*math.cos(player.movement.rotation)
             modelSetPosition(player.controller,player.position.x,player.position.y,player.position.z)
-            player.position.y = player.position.y-9.9486132/2.0
+            player.position.y = player.position.y-10.0001583/2.0
         end
     end
     if(player.movement.animation ~= l_newAnimation) then
@@ -412,10 +412,9 @@ addEvent("onAppStart",control.init)
 
 math.pi2 = math.pi*2.0
 function interpolateAngles(a,b,blend)
-    a = math.fmod(a,math.pi2)
-    b = math.fmod(b,math.pi2)
-    if(a < 0.0) then a = a+math.pi2 end
-    if(b < 0.0) then b = b+math.pi2 end
+    -- 'a' and 'b' - [-2*PI,2*PI], 'blend' - [0.0,1.0]
+    a = math.fmod(a+math.pi2,math.pi2)
+    b = math.fmod(b+math.pi2,math.pi2)
     if(b-a > math.pi) then a = a+math.pi2
     elseif(a-b > math.pi) then b = b+math.pi2 end
     return math.fmod(a-(a-b)*blend,math.pi2)
@@ -425,9 +424,8 @@ function math.lerp(a,b,blend)
 end
 function math.clamp(n,low,high) return math.min(math.max(n,low),high) end
 function fixAngle(f_angle)
-    f_angle = f_angle%math.pi2
-    if(f_angle < 0.0) then f_angle = f_angle+math.pi2 end
-    return f_angle
+    -- 'f_angle' - [-2*PI,2*PI]
+    return math.fmod(f_angle+math.pi2,math.pi2)
 end
 
 -- ^(?([^\r\n])\s)*[^\s+?/]+[^\n]*$
