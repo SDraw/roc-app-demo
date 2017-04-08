@@ -9,7 +9,6 @@ function geometry.init()
     geometry.sphere = geometryCreate("models/icosphere.rmf")
     geometry.rope = geometryCreate("models/rope.rmf")
     geometry.clouds = geometryCreate("models/clouds.rmf")
-    geometry.water = geometryCreate("models/water_plane.rmf")
     geometry.fire = geometryCreate("models/flame.rmf")
     geometry.dummy = geometryCreate("models/dummy.rmf")
 end

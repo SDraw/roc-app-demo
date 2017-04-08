@@ -11,7 +11,6 @@ function shader.init()
     shader.shadow = shaderCreate("shaders/shadow_vert.glsl","shaders/shadow_frag.glsl")
     shader.text = shaderCreate("shaders/text_vert.glsl","shaders/text_frag.glsl")
     shader.texture = shaderCreate("shaders/texture_vert.glsl","shaders/texture_frag.glsl")
-    shader.water = shaderCreate("shaders/water_vert.glsl","shaders/water_frag.glsl")
     shader.fire = shaderCreate("shaders/fire_vert.glsl","shaders/fire_frag.glsl")
 end
 addEvent("onAppStart",shader.init)
@@ -46,9 +45,6 @@ function shader.getSkyboxShader()
 end
 function shader.getCloudsShader()
     return shader.clouds
-end
-function shader.getWaterShader()
-    return shader.water
 end
 function shader.getFireShader()
     return shader.fire

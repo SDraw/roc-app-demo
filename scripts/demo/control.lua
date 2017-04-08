@@ -82,6 +82,7 @@ player = {
     },
     model = false,
     controller = false,
+    collision = false,
     animation = false
 }
 function player.getPosition()
@@ -110,9 +111,9 @@ function control.func.left(state)
 end
 function control.func.jump(state)
     if(state == 1) then
-        local l_vx,l_vy,l_vz = modelGetCollisionProperty(player.controller,"velocity")
+        local l_vx,l_vy,l_vz = collisionGetVelocity(player.collision)
         l_vy = l_vy+9.8
-        modelSetCollisionProperty(player.controller,"velocity",l_vx,l_vy,l_vz)
+        collisionSetVelocity(player.collision,l_vx,l_vy,l_vz)
     end
 end
 
@@ -172,7 +173,10 @@ function control.onMouseKeyPress(key,action)
         if(key == "left" and action > 0) then
             if(control.hit.endX and type(control.hit.element) == "userdata") then
                 if(getElementType(control.hit.element) == "model") then
-                    modelSetCollisionProperty(control.hit.element,"velocity",control.camera.direction.x*20.0,control.camera.direction.y*20.0,control.camera.direction.z*20.0)
+                    local l_col = modelGetCollision(control.hit.element)
+                    if(l_col) then
+                        collisionSetVelocity(l_col,control.camera.direction.x*20.0,control.camera.direction.y*20.0,control.camera.direction.z*20.0)
+                    end
                 end
             end
         end
@@ -295,7 +299,7 @@ function control.onOGLPreRender()
     
     if(physicsGetEnabled()) then
         player.position.x,player.position.y,player.position.z = modelGetPosition(player.model,true)
-        local l_vx,l_vy,l_vz = modelGetCollisionProperty(player.controller,"velocity")
+        local l_vx,l_vy,l_vz = collisionGetVelocity(player.collision)
         if(l_state) then
             l_vx = math.lerp(5.0*math.sin(player.movement.rotation),l_vx,0.6)
             l_vz = math.lerp(5.0*math.cos(player.movement.rotation),l_vz,0.6)
@@ -303,7 +307,7 @@ function control.onOGLPreRender()
             l_vx = math.lerp(0.0,l_vx,0.6)
             l_vz = math.lerp(0.0,l_vz,0.6)
         end
-        modelSetCollisionProperty(player.controller,"velocity",l_vx,l_vy,l_vz)
+        collisionSetVelocity(player.collision,l_vx,l_vy,l_vz)
     else
         if(l_state) then
             player.position.x,player.position.y,player.position.z = modelGetPosition(player.controller)
@@ -349,7 +353,10 @@ function control.onOGLPreRender()
             control.camera.position.y+control.camera.direction.y*control.grab.distance,
             control.camera.position.z+control.camera.direction.z*control.grab.distance
         )
-        modelSetCollisionProperty(control.grab.element,"velocity",0.0,0.0,0.0)
+        local l_col = modelGetCollision(control.grab.element)
+        if(l_col) then
+            collisionSetVelocity(l_col,0.0,0.0,0.0)
+        end
     end
 end
 
@@ -370,9 +377,12 @@ end
 function control.joypad.onJoypadButton(jid,jbutton,jstate)
     print("onJoypadButton",jid,jbutton,jstate)
     if(jid == 0 and jbutton == 0 and jstate == 1) then
-        local l_x,l_y,l_z = modelGetCollisionProperty(model.rigid_body[#model.rigid_body],"velocity")
-        l_y = l_y+9.8
-        modelSetCollisionProperty(model.rigid_body[#model.rigid_body],"velocity",l_x,l_y,l_z)
+        local l_col = modelGetCollision(model.rigid_body[#model.rigid_body])
+        if(l_col) then
+            local l_x,l_y,l_z = collisionGetVelocity(l_col)
+            l_y = l_y+9.8
+            collisionSetVelocity(l_col,l_x,l_y,l_z)
+        end
     end
 end
 function control.joypad.onJoypadAxis(jid,jaxis,jvalue)
@@ -400,8 +410,9 @@ function control.init()
     
     player.controller = modelCreate()
     modelSetPosition(player.controller,0.0,5.0,0.0)
-    modelSetCollision(player.controller,"cylinder",100.0, 0.1,10.0001583/2.0)
-    modelSetCollisionProperty(player.controller,"angular_factor",0.0,0.0,0.0)
+    player.collision = collisionCreate("cylinder",100.0, 0.1,10.0001583/2.0)
+    collisionSetAngularFactor(player.collision,0.0,0.0,0.0)
+    collisionAttach(player.collision,player.controller)
     physicsSetModelsCollidable(player.controller,player.model,false)
     modelAttach(player.model,player.controller)
     modelSetPosition(player.model,0.0,-10.0001583/2.0,0.0) -- offset from cylinder center

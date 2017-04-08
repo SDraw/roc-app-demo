@@ -81,10 +81,6 @@ function render.stage.main()
         modelDraw(v,true,true)
     end
     
-    setActiveShader(shader.getWaterShader())
-    setActiveScene(scene.getMainScene())
-    modelDraw(model.water,true,true)
-    
     setActiveShader(shader.getFireShader())
     setActiveScene(scene.getMainScene())
     modelDraw(model.fire,true,true)

@@ -12,12 +12,15 @@ function physics.chaos()
     if(not physicsGetEnabled()) then return end
     local vx,vy,vz = 0.0,0.0,0.0
     for _,v in ipairs(model.rigid_body) do
-        vx,vy,vz = modelGetCollisionProperty(v,"velocity")
-        if(vx ~= false) then
-            vx = vx+9.8*math.random2()*2.5
-            vy = vy+9.8*math.random2()*2.5
-            vz = vz+9.8*math.random2()*2.5
-            modelSetCollisionProperty(v,"velocity",vx,vy,vz)
+        local l_col = modelGetCollision(v)
+        if(l_col) then
+            vx,vy,vz = collisionGetVelocity(l_col)
+            if(vx ~= false) then
+                vx = vx+9.8*math.random2()*2.5
+                vy = vy+9.8*math.random2()*2.5
+                vz = vz+9.8*math.random2()*2.5
+                collisionSetVelocity(l_col,vx,vy,vz)
+            end
         end
     end
 end
