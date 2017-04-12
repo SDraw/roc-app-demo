@@ -175,7 +175,12 @@ function control.onMouseKeyPress(key,action)
                 if(getElementType(control.hit.element) == "model") then
                     local l_col = modelGetCollision(control.hit.element)
                     if(l_col) then
-                        collisionSetVelocity(l_col,control.camera.direction.x*20.0,control.camera.direction.y*20.0,control.camera.direction.z*20.0)
+                        local l_mass = collisionGetMass(l_col)*20.0
+                        local l_px,l_py,l_pz = collisionGetPosition(l_col)
+                        collisionApplyImpulse(l_col,
+                            control.camera.direction.x*l_mass,control.camera.direction.y*l_mass,control.camera.direction.z*l_mass,
+                            control.hit.endX-l_px,control.hit.endY-l_py,control.hit.endZ-l_pz
+                        )
                     end
                 end
             end
