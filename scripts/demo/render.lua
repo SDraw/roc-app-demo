@@ -41,7 +41,7 @@ end
 
 function render.stage.shadow()
     setRenderTarget(target.getShadowTarget())
-    oglClear("depth")
+    clearRenderArea("depth")
     setActiveShader(shader.getShadowShader())
     setActiveScene(scene.getShadowScene())
 
@@ -53,8 +53,8 @@ function render.stage.shadow()
 end
 function render.stage.main()
     setRenderTarget()
-    oglClear("depth")
-    oglClear("color")
+    clearRenderArea("depth")
+    clearRenderArea("color")
     
     setActiveShader(shader.getSkyboxShader())
     setActiveScene(scene.getMainScene())
@@ -160,7 +160,7 @@ function render.fade.processIn()
     end
     setActiveShader(shader.texture)
     setRenderTarget()
-    oglClear("depth")
+    clearRenderArea("depth")
     local l_ww,l_wh = window.getSize()
     textureDraw(texture.black,0,0,l_ww,l_wh, 0.0, 1.0,1.0,1.0,1.0-l_dif/3.0)
 end
@@ -177,10 +177,10 @@ function render.fade.processOut()
     local l_ww,l_wh = window.getSize()
     setActiveShader(shader.texture)
     setRenderTarget()
-    oglClear("depth")
+    clearRenderArea("depth")
     textureDraw(texture.black,0,0,l_ww,l_wh, 0.0, 1.0,1.0,1.0,l_dif/3.0)
     sound.setGlobalVolume((1.0-l_dif/3.0)*100.0)
     if(l_dif > 3.0) then
-        closeApplication()
+        closeWindow()
     end
 end
