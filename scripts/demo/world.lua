@@ -17,9 +17,9 @@ function world.init()
     world.step = math.pi/18.0
     world.cubeStep = world.step/16
     
-    addEvent("onOGLPreRender",world.update)
+    addEventHandler("onOGLPreRender",world.update)
 end
-addEvent("onAppStart",world.init)
+addEventHandler("onAppStart",world.init)
 
 function world.update()
     local l_cx,l_cy,l_cz = control.getCameraPosition()

@@ -140,8 +140,8 @@ function control.func.console(state)
     if(state == 0) then return end
     control.console.visible = true
     control.console.fix = true
-    addEvent("onKeyPress",control.console.onKeyPress)
-    addEvent("onTextInput",control.console.onTextInput)
+    addEventHandler("onKeyPress",control.console.onKeyPress)
+    addEventHandler("onTextInput",control.console.onTextInput)
 end
 
 function control.func.close(state)
@@ -221,8 +221,8 @@ function control.console.onKeyPress(key,action)
             control.console.visible = false
             control.console.fix = false
             control.console.text = ""
-            removeEvent("onKeyPress",control.console.onKeyPress)
-            removeEvent("onTextInput",control.console.onTextInput)
+            removeEventHandler("onKeyPress",control.console.onKeyPress)
+            removeEventHandler("onTextInput",control.console.onTextInput)
         elseif(key == "return") then
             if(control.console.text:len() == 0) then return end
             load(control.console.text)()
@@ -369,12 +369,12 @@ control.joypad = {}
 
 function control.joypad.onJoypadConnect(jid,state)
     if(state == 1) then
-        addEvent("onJoypadButton",control.joypad.onJoypadButton)
-        addEvent("onJoypadAxis",control.joypad.onJoypadAxis)
+        addEventHandler("onJoypadButton",control.joypad.onJoypadButton)
+        addEventHandler("onJoypadAxis",control.joypad.onJoypadAxis)
         print("Joypad connected",jid,state)
     else
-        removeEvent("onJoypadButton",control.joypad.onJoypadButton)
-        removeEvent("onJoypadAxis",control.joypad.onJoypadAxis)
+        removeEventHandler("onJoypadButton",control.joypad.onJoypadButton)
+        removeEventHandler("onJoypadAxis",control.joypad.onJoypadAxis)
         print("Joypad disconnected",jid,state)
     end
 end
@@ -397,19 +397,19 @@ end
 function control.init()
     setCursorMode("hl")
     
-    addEvent("onKeyPress",control.onKeyPress)
-    addEvent("onMouseKeyPress",control.onMouseKeyPress)
-    addEvent("onMouseKeyPress",control.grab.onMouseKeyPress)
-    addEvent("onMouseScroll",control.onMouseScroll)
-    addEvent("onCursorMove",control.onCursorMove)
+    addEventHandler("onKeyPress",control.onKeyPress)
+    addEventHandler("onMouseKeyPress",control.onMouseKeyPress)
+    addEventHandler("onMouseKeyPress",control.grab.onMouseKeyPress)
+    addEventHandler("onMouseScroll",control.onMouseScroll)
+    addEventHandler("onCursorMove",control.onCursorMove)
     
     if(isJoypadConnected(0)) then
-        addEvent("onJoypadButton",control.joypad.onJoypadButton)
-        addEvent("onJoypadAxis",control.joypad.onJoypadAxis)
+        addEventHandler("onJoypadButton",control.joypad.onJoypadButton)
+        addEventHandler("onJoypadAxis",control.joypad.onJoypadAxis)
     end
-    addEvent("onJoypadConnect",control.joypad.onJoypadConnect)
+    addEventHandler("onJoypadConnect",control.joypad.onJoypadConnect)
     
-    addEvent("onOGLPreRender",control.onOGLPreRender)
+    addEventHandler("onOGLPreRender",control.onOGLPreRender)
     
     player.model = model.dummy
     
@@ -424,7 +424,7 @@ function control.init()
     
     player.animation = animation.dummy
 end
-addEvent("onAppStart",control.init)
+addEventHandler("onAppStart",control.init)
 
 math.pi2 = math.pi*2.0
 function interpolateAngles(a,b,blend)

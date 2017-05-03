@@ -12,4 +12,4 @@ function geometry.init()
     geometry.fire = geometryCreate("models/flame.rmf")
     geometry.dummy = geometryCreate("models/dummy.rmf")
 end
-addEvent("onAppStart",geometry.init)
+addEventHandler("onAppStart",geometry.init)

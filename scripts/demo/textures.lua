@@ -14,4 +14,4 @@ function texture.init()
     texture.logo = textureCreate("rgba","nearest",false,"textures/roc_logo.png")
     texture.black = textureCreate("rgba","nearest",true,"textures/black.png")
 end
-addEvent("onAppStart",texture.init)
+addEventHandler("onAppStart",texture.init)

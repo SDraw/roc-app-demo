@@ -13,7 +13,7 @@ function shader.init()
     shader.texture = shaderCreate("shaders/texture_vert.glsl","shaders/texture_frag.glsl")
     shader.fire = shaderCreate("shaders/fire_vert.glsl","shaders/fire_frag.glsl")
 end
-addEvent("onAppStart",shader.init)
+addEventHandler("onAppStart",shader.init)
 
 function shader.getShadowShader()
     return shader.shadow

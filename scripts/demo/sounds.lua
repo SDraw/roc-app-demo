@@ -10,10 +10,10 @@ function sound.init()
     math.randomseed(getTickCount())
     sound.index = math.random(1,#sound.music)-1
 end
-addEvent("onAppStart",sound.init)
+addEventHandler("onAppStart",sound.init)
 
 function sound.playBackground()
-    addEvent("onOGLPreRender",sound.updateBackground)
+    addEventHandler("onOGLPreRender",sound.updateBackground)
 end
 
 function sound.updateBackground()

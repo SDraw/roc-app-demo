@@ -5,9 +5,9 @@ function window.init()
     window.size[1],window.size[2] = getWindowSize()
     setWindowIcon("coal.png")
     setWindowTitle("RunOnCoal Demo Scene / デモシーン / Демосцена")
-    addEvent("onWindowResize",window.updateSize)
+    addEventHandler("onWindowResize",window.updateSize)
 end
-addEvent("onAppStart",window.init)
+addEventHandler("onAppStart",window.init)
 
 function window.updateSize(width,height)
     window.size[1],window.size[2] = width,height

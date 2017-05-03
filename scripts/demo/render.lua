@@ -6,10 +6,10 @@ function render.init()
         time = getTime()
     }
 
-    addEvent("onOGLRender",render.stage.fpsUpdate)
-    addEvent("onOGLRender",render.stage.shadow)
-    addEvent("onOGLRender",render.stage.main)
-    addEvent("onOGLRender",render.stage.gui)
+    addEventHandler("onOGLRender",render.stage.fpsUpdate)
+    addEventHandler("onOGLRender",render.stage.shadow)
+    addEventHandler("onOGLRender",render.stage.main)
+    addEventHandler("onOGLRender",render.stage.gui)
 
     render.info[1] = { title = "FPS: ", data = "" }
     render.info[2] = { title = "Camera position: ", data = "" }
@@ -23,9 +23,9 @@ function render.init()
     render.fade.init = true
     render.fade.start = 0
     render.fade.lock = true
-    addEvent("onOGLRender",render.fade.processIn)
+    addEventHandler("onOGLRender",render.fade.processIn)
 end
-addEvent("onAppStart",render.init)
+addEventHandler("onAppStart",render.init)
 
 function render.getFPS()
     return render.var.fps
@@ -155,12 +155,11 @@ function render.fade.processIn()
     local l_dif = getTime()-render.fade.start
     if(l_dif > 3.0) then
         render.fade.lock = false
-        removeEvent("onOGLRender",render.fade.processIn)
+        removeEventHandler("onOGLRender",render.fade.processIn)
         return
     end
     setActiveShader(shader.texture)
     setRenderTarget()
-    clearRenderArea("depth")
     local l_ww,l_wh = window.getSize()
     textureDraw(texture.black,0,0,l_ww,l_wh, 0.0, 1.0,1.0,1.0,1.0-l_dif/3.0)
 end
@@ -169,7 +168,7 @@ function render.fade.close()
     if(render.fade.lock) then return end
     render.fade.lock = true
     render.fade.start = getTime()
-    addEvent("onOGLRender",render.fade.processOut)
+    addEventHandler("onOGLRender",render.fade.processOut)
 end
 
 function render.fade.processOut()
@@ -177,7 +176,6 @@ function render.fade.processOut()
     local l_ww,l_wh = window.getSize()
     setActiveShader(shader.texture)
     setRenderTarget()
-    clearRenderArea("depth")
     textureDraw(texture.black,0,0,l_ww,l_wh, 0.0, 1.0,1.0,1.0,l_dif/3.0)
     sound.setGlobalVolume((1.0-l_dif/3.0)*100.0)
     if(l_dif > 3.0) then
