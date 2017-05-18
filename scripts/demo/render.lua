@@ -120,7 +120,7 @@ function render.info.update()
         render.info[6].data = string.format("%.4f,%.4f,%.4f",control.getHitPosition())
         render.info[7].data = string.format("%.4f,%.4f,%.4f",control.getHitNormal())
         local l_hitElement = control.getHitElement()
-        render.info[8].data = (type(l_hitElement) == "userdata") and getElementType(l_hitElement).." -> "..tostring(l_hitElement) or tostring(l_hitElement)
+        render.info[8].data = (type(l_hitElement) == "userdata") and elementGetType(l_hitElement).." -> "..tostring(l_hitElement) or tostring(l_hitElement)
     else
         render.info[6].data = ""
         render.info[7].data = ""

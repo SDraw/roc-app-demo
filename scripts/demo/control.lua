@@ -172,7 +172,7 @@ function control.onMouseKeyPress(key,action)
     if(control.cursor.lock == true) then
         if(key == "left" and action > 0) then
             if(control.hit.endX and type(control.hit.element) == "userdata") then
-                if(getElementType(control.hit.element) == "model") then
+                if(elementGetType(control.hit.element) == "model") then
                     local l_col = modelGetCollision(control.hit.element)
                     if(l_col) then
                         local l_mass = collisionGetMass(l_col)*20.0
@@ -191,7 +191,7 @@ end
 function control.grab.onMouseKeyPress(key,action)
     if(control.cursor.lock == true) then
         if(key == "right" and action == 1) then
-            if(control.grab.state == false and type(control.hit.element) == "userdata" and getElementType(control.hit.element) == "model") then
+            if(control.grab.state == false and type(control.hit.element) == "userdata" and elementGetType(control.hit.element) == "model") then
                 if(control.hit.element ~= player.model and control.hit.element ~= player.controller) then
                     control.grab.state = true
                     control.grab.element = control.hit.element
