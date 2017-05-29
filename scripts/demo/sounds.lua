@@ -33,7 +33,7 @@ function sound.updateBackground()
                 soundSetVolume(sound.background,(sound.length-l_time)/3.0*100.0)
             end
         elseif(l_state == "stopped") then
-            soundDestroy(sound.background)
+            elementDestroy(sound.background)
             sound.background = false
         end
     end

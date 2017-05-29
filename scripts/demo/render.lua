@@ -88,15 +88,15 @@ end
 function render.stage.gui()
     local l_ww,l_wh = window.getSize()
     setActiveShader(shader.getTextureShader())
-    textureDraw(texture.logo,10,16,256,36, 0, 1,1,1,0.75)
+    drawableDraw(texture.logo,10,16,256,36, 0, 1,1,1,0.75)
     if(control.isConsoleVisible()) then
-        textureDraw(texture.box,0,0,l_ww,16)
+        drawableDraw(texture.box,0,0,l_ww,16)
     end
     if(control.isCursorLocked()) then
         if(control.isHitDetected()) then
-            textureDraw(texture.crosshair.fill,l_ww/2-12,l_wh/2-12,24,24)
+            drawableDraw(texture.crosshair.fill,l_ww/2-12,l_wh/2-12,24,24)
         else
-            textureDraw(texture.crosshair.free,l_ww/2-12,l_wh/2-12,24,24)
+            drawableDraw(texture.crosshair.free,l_ww/2-12,l_wh/2-12,24,24)
         end
     end
 
@@ -161,7 +161,7 @@ function render.fade.processIn()
     setActiveShader(shader.texture)
     setRenderTarget()
     local l_ww,l_wh = window.getSize()
-    textureDraw(texture.black,0,0,l_ww,l_wh, 0.0, 1.0,1.0,1.0,1.0-l_dif/3.0)
+    drawableDraw(texture.black,0,0,l_ww,l_wh, 0.0, 1.0,1.0,1.0,1.0-l_dif/3.0)
 end
 
 function render.fade.close()
@@ -176,7 +176,7 @@ function render.fade.processOut()
     local l_ww,l_wh = window.getSize()
     setActiveShader(shader.texture)
     setRenderTarget()
-    textureDraw(texture.black,0,0,l_ww,l_wh, 0.0, 1.0,1.0,1.0,l_dif/3.0)
+    drawableDraw(texture.black,0,0,l_ww,l_wh, 0.0, 1.0,1.0,1.0,l_dif/3.0)
     sound.setGlobalVolume((1.0-l_dif/3.0)*100.0)
     if(l_dif > 3.0) then
         closeWindow()
