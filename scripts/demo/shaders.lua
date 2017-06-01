@@ -3,8 +3,8 @@ shader = {}
 function shader.init()
     shader.main = {}
     shader.main.element = shaderCreate("shaders/main_vert.glsl","shaders/main_frag.glsl")
-    shaderSetUniformValue(shader.main.element,"gTexture3","drawable",target.shadow)
     shaderSetUniformValue(shader.main.element,"gShadowSamples","float",1.0)
+    shaderAttachDrawable(shader.main.element,target.shadow,"gTexture3")
     
     shader.skybox = shaderCreate("shaders/skybox_vert.glsl","shaders/skybox_frag.glsl")
     shader.clouds = shaderCreate("shaders/clouds_vert.glsl","shaders/clouds_frag.glsl")
