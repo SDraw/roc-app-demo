@@ -3,7 +3,7 @@ physics = {}
 function physics.init()
     physicsSetFloorEnabled(true)
 end
-addEventHandler("onAppStart",physics.init)
+addEventHandler("onEngineStart",physics.init)
 
 function physics.flip()
     physicsSetEnabled(not physicsGetEnabled())

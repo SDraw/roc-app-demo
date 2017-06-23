@@ -28,7 +28,7 @@ function scene.init()
     cameraSetDepth(scene.shadow.camera,-50.0,50.0)
     sceneSetCamera(scene.shadow.scene,scene.shadow.camera)
 end
-addEventHandler("onAppStart",scene.init)
+addEventHandler("onEngineStart",scene.init)
 
 function scene.updateMainAspectRatio(width,height)
     cameraSetAspectRatio(scene.main.camera,width/height)

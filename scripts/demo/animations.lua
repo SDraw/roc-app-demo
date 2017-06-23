@@ -6,4 +6,4 @@ function animation.init()
         walk = animationCreate("animations/dummy_walk.raf")
     }
 end
-addEventHandler("onAppStart",animation.init)
+addEventHandler("onEngineStart",animation.init)

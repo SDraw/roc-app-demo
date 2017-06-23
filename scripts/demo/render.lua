@@ -6,10 +6,10 @@ function render.init()
         time = getTime()
     }
 
-    addEventHandler("onOGLRender",render.stage.fpsUpdate)
-    addEventHandler("onOGLRender",render.stage.shadow)
-    addEventHandler("onOGLRender",render.stage.main)
-    addEventHandler("onOGLRender",render.stage.gui)
+    addEventHandler("onRender",render.stage.fpsUpdate)
+    addEventHandler("onRender",render.stage.shadow)
+    addEventHandler("onRender",render.stage.main)
+    addEventHandler("onRender",render.stage.gui)
 
     render.info[1] = { title = "FPS: ", data = "" }
     render.info[2] = { title = "Camera position: ", data = "" }
@@ -23,9 +23,9 @@ function render.init()
     render.fade.init = true
     render.fade.start = 0
     render.fade.lock = true
-    addEventHandler("onOGLRender",render.fade.processIn)
+    addEventHandler("onRender",render.fade.processIn)
 end
-addEventHandler("onAppStart",render.init)
+addEventHandler("onEngineStart",render.init)
 
 function render.getFPS()
     return render.var.fps
@@ -155,7 +155,7 @@ function render.fade.processIn()
     local l_dif = getTime()-render.fade.start
     if(l_dif > 3.0) then
         render.fade.lock = false
-        removeEventHandler("onOGLRender",render.fade.processIn)
+        removeEventHandler("onRender",render.fade.processIn)
         return
     end
     setActiveShader(shader.texture)
@@ -168,7 +168,7 @@ function render.fade.close()
     if(render.fade.lock) then return end
     render.fade.lock = true
     render.fade.start = getTime()
-    addEventHandler("onOGLRender",render.fade.processOut)
+    addEventHandler("onRender",render.fade.processOut)
 end
 
 function render.fade.processOut()

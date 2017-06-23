@@ -58,4 +58,4 @@ function model.init()
     
     model.fire = modelCreate(geometry.fire)
 end
-addEventHandler("onAppStart",model.init)
+addEventHandler("onEngineStart",model.init)

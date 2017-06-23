@@ -198,9 +198,17 @@ function control.grab.onMouseKeyPress(key,action)
                     local l_px,l_py,l_pz = modelGetPosition(control.grab.element,true)
                     l_px,l_py,l_pz = l_px-control.camera.position.x,l_py-control.camera.position.y,l_pz-control.camera.position.z
                     control.grab.distance = math.sqrt(l_px*l_px+l_py*l_py+l_pz*l_pz)
+                    local l_collision = modelGetCollision(control.grab.element)
+                    if(l_collision) then
+                        collisionSetMotionType(l_collision,"kinematic")
+                    end
                 end
             else
                 control.grab.state = false
+                local l_collision = modelGetCollision(control.grab.element)
+                if(l_collision) then
+                    collisionSetMotionType(l_collision,"default")
+                end
                 control.grab.element = false
                 control.grab.distance = 0.0
             end
@@ -276,7 +284,7 @@ function control.onMouseScroll(f_wheel,f_delta)
 end
 
 -- Axis X - sin, axis Z - cos, axis Y - depends on algorithm
-function control.onOGLPreRender()
+function control.onPreRender()
     -- Update player position, rotation and animation
     local l_newAnimation = "idle"
     local l_state = (control.state.forward or control.state.backward or control.state.left or control.state.right)
@@ -409,7 +417,7 @@ function control.init()
     end
     addEventHandler("onJoypadConnect",control.joypad.onJoypadConnect)
     
-    addEventHandler("onOGLPreRender",control.onOGLPreRender)
+    addEventHandler("onPreRender",control.onPreRender)
     
     player.model = model.dummy
     
@@ -424,7 +432,7 @@ function control.init()
     
     player.animation = animation.dummy
 end
-addEventHandler("onAppStart",control.init)
+addEventHandler("onEngineStart",control.init)
 
 math.pi2 = math.pi*2.0
 function interpolateAngles(a,b,blend)

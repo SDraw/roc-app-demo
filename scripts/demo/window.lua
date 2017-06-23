@@ -7,7 +7,7 @@ function window.init()
     setWindowTitle("RunOnCoal Demo Scene / デモシーン / Демосцена")
     addEventHandler("onWindowResize",window.updateSize)
 end
-addEventHandler("onAppStart",window.init)
+addEventHandler("onEngineStart",window.init)
 
 function window.updateSize(width,height)
     window.size[1],window.size[2] = width,height
