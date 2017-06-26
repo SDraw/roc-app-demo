@@ -167,12 +167,10 @@ end
 ----
 
 function control.onKeyPress(key,action)
-    if(control.fix) then
-        control.fix = false
-        return
-    end
-    if(control.keyFunc[key]) then
-        control.keyFunc[key](action)
+    if(not control.fix) then
+        if(control.keyFunc[key]) then
+            control.keyFunc[key](action)
+        end
     end
 end
 
@@ -225,11 +223,9 @@ function control.grab.onMouseKeyPress(key,action)
 end
 
 function control.console.onTextInput(str1)
-    if(control.console.fix) then
-        control.console.fix = false
-        return
+    if(not control.console.fix) then
+        control.console.text = control.console.text..str1
     end
-    control.console.text = control.console.text..str1
 end
 function control.console.onKeyPress(key,action)
     if(action == 1) then
@@ -240,6 +236,7 @@ function control.console.onKeyPress(key,action)
             removeEventHandler("onKeyPress",control.console.onKeyPress)
             removeEventHandler("onTextInput",control.console.onTextInput)
             
+            control.fix = true
             addEventHandler("onKeyPress",control.onKeyPress)
         elseif(key == "return") then
             if(control.console.text:len() == 0) then return end
@@ -295,6 +292,13 @@ end
 
 -- Axis X - sin, axis Z - cos, axis Y - depends on algorithm
 function control.onPreRender()
+    if(control.fix) then
+        control.fix = false
+    end
+    if(control.console.fix) then
+        control.console.fix = false
+    end
+    
     -- Update player position, rotation and animation
     local l_newAnimation = "idle"
     local l_state = (control.state.forward or control.state.backward or control.state.left or control.state.right)
