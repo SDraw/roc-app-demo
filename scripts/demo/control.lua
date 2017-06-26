@@ -30,8 +30,7 @@ control = {
         state = false,
         element = false,
         distance = 0.0
-    },
-    fix = false
+    }
 }
 
 function control.getCameraPosition()
@@ -153,9 +152,8 @@ function control.func.console(state)
         control.resetControls()
         
         control.console.visible = true
-        control.console.fix = true
         addEventHandler("onKeyPress",control.console.onKeyPress)
-        addEventHandler("onTextInput",control.console.onTextInput)
+        addEventHandler("onTextInput",control.console.onTextInput_S1)
     end
 end
 
@@ -167,10 +165,8 @@ end
 ----
 
 function control.onKeyPress(key,action)
-    if(not control.fix) then
-        if(control.keyFunc[key]) then
-            control.keyFunc[key](action)
-        end
+    if(control.keyFunc[key]) then
+        control.keyFunc[key](action)
     end
 end
 
@@ -222,21 +218,20 @@ function control.grab.onMouseKeyPress(key,action)
     end
 end
 
-function control.console.onTextInput(str1)
-    if(not control.console.fix) then
-        control.console.text = control.console.text..str1
-    end
+function control.console.onTextInput_S1() -- skip of tilde
+    removeEventHandler("onTextInput",control.console.onTextInput_S1)
+    addEventHandler("onTextInput",control.console.onTextInput_S2)
+end
+function control.console.onTextInput_S2(str1)
+    control.console.text = control.console.text..str1
 end
 function control.console.onKeyPress(key,action)
     if(action == 1) then
         if(key == "esc") then
             control.console.visible = false
-            control.console.fix = false
             control.console.text = ""
             removeEventHandler("onKeyPress",control.console.onKeyPress)
-            removeEventHandler("onTextInput",control.console.onTextInput)
-            
-            control.fix = true
+            removeEventHandler("onTextInput",control.console.onTextInput_S2)
             addEventHandler("onKeyPress",control.onKeyPress)
         elseif(key == "return") then
             if(control.console.text:len() == 0) then return end
@@ -292,13 +287,6 @@ end
 
 -- Axis X - sin, axis Z - cos, axis Y - depends on algorithm
 function control.onPreRender()
-    if(control.fix) then
-        control.fix = false
-    end
-    if(control.console.fix) then
-        control.console.fix = false
-    end
-    
     -- Update player position, rotation and animation
     local l_newAnimation = "idle"
     local l_state = (control.state.forward or control.state.backward or control.state.left or control.state.right)
@@ -384,17 +372,16 @@ end
 control.joypad = {}
 
 function control.joypad.onJoypadConnect(jid,state)
-    if(state == 1) then
-        addEventHandler("onJoypadButton",control.joypad.onJoypadButton)
-        addEventHandler("onJoypadAxis",control.joypad.onJoypadAxis)
-    else
-        removeEventHandler("onJoypadButton",control.joypad.onJoypadButton)
-        removeEventHandler("onJoypadAxis",control.joypad.onJoypadAxis)
+    if(jid == 0) then
+        if(state == 1) then
+            addEventHandler("onJoypadButton",control.joypad.onJoypadButton)
+        else
+            removeEventHandler("onJoypadButton",control.joypad.onJoypadButton)
+        end
     end
 end
 
 function control.joypad.onJoypadButton(jid,jbutton,jstate)
-    print("onJoypadButton",jid,jbutton,jstate)
     if(jid == 0 and jbutton == 0 and jstate == 1) then
         local l_col = modelGetCollision(model.rigid_body[#model.rigid_body])
         if(l_col) then
