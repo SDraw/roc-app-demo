@@ -30,7 +30,8 @@ control = {
         state = false,
         element = false,
         distance = 0.0
-    }
+    },
+    fix = false
 }
 
 function control.getCameraPosition()
@@ -66,6 +67,13 @@ end
 function control.getConsoleText()
     return control.console.text
 end
+
+function control.resetControls()
+    for k,_ in pairs(control.state) do
+        control.state[k] = false
+    end
+end
+----
 
 player = {
     position = {
@@ -118,59 +126,59 @@ function control.func.jump(state)
 end
 
 function control.func.lock(state)
-    if(state == 0) then return end
-    control.cursor.lock = not control.cursor.lock
-    if(control.cursor.lock) then
-        setCursorMode("hl")
-    else
-        setCursorMode("vu")
+    if(state == 1) then
+        control.cursor.lock = not control.cursor.lock
+        if(control.cursor.lock) then
+            setCursorMode("hl")
+        else
+            setCursorMode("vu")
+        end
     end
 end
 
 function control.func.physicsState(state)
-    if(state == 0) then return end
-    physics.flip()
+    if(state == 1) then
+        physics.flip()
+    end
 end
 function control.func.physicsJump(state)
-    if(state == 0) then return end
-    physics.chaos()
+    if(state == 1) then
+        physics.chaos()
+    end
 end
 
 function control.func.console(state)
-    if(state == 0) then return end
-    control.console.visible = true
-    control.console.fix = true
-    addEventHandler("onKeyPress",control.console.onKeyPress)
-    addEventHandler("onTextInput",control.console.onTextInput)
+    if(state == 1) then
+        removeEventHandler("onKeyPress",control.onKeyPress)
+        control.resetControls()
+        
+        control.console.visible = true
+        control.console.fix = true
+        addEventHandler("onKeyPress",control.console.onKeyPress)
+        addEventHandler("onTextInput",control.console.onTextInput)
+    end
 end
 
 function control.func.close(state)
-    if(state == 0) then return end
-    render.fade.close()
+    if(state == 1) then
+        render.fade.close()
+    end
 end
 ----
-control.keyFunc = {
-    ["w"] = control.func.forward,
-    ["s"] = control.func.backward,
-    ["d"] = control.func.right,
-    ["a"] = control.func.left,
-    ["space"] = control.func.jump,
-    ["lalt"] = control.func.lock,
-    ["n"] = control.func.physicsState,
-    ["q"] = control.func.physicsJump,
-    ["esc"] = control.func.close,
-    ["tilde"] = control.func.console
-}
 
 function control.onKeyPress(key,action)
-    if(control.console.visible == true) then return end
-    if(control.keyFunc[key] == nil) then return end
-    control.keyFunc[key](action)
+    if(control.fix) then
+        control.fix = false
+        return
+    end
+    if(control.keyFunc[key]) then
+        control.keyFunc[key](action)
+    end
 end
 
 function control.onMouseKeyPress(key,action)
-    if(control.cursor.lock == true) then
-        if(key == "left" and action > 0) then
+    if(control.cursor.lock) then
+        if(key == "left" and action ~= 0) then
             if(control.hit.endX and type(control.hit.element) == "userdata") then
                 if(elementGetType(control.hit.element) == "model") then
                     local l_col = modelGetCollision(control.hit.element)
@@ -189,9 +197,9 @@ function control.onMouseKeyPress(key,action)
 end
 
 function control.grab.onMouseKeyPress(key,action)
-    if(control.cursor.lock == true) then
-        if(key == "right" and action == 1) then
-            if(control.grab.state == false and type(control.hit.element) == "userdata" and elementGetType(control.hit.element) == "model") then
+    if(control.cursor.lock) then
+        if(key == "right" and action ~= 0) then
+            if(not control.grab.state and type(control.hit.element) == "userdata" and elementGetType(control.hit.element) == "model") then
                 if(control.hit.element ~= player.model and control.hit.element ~= player.controller) then
                     control.grab.state = true
                     control.grab.element = control.hit.element
@@ -231,6 +239,8 @@ function control.console.onKeyPress(key,action)
             control.console.text = ""
             removeEventHandler("onKeyPress",control.console.onKeyPress)
             removeEventHandler("onTextInput",control.console.onTextInput)
+            
+            addEventHandler("onKeyPress",control.onKeyPress)
         elseif(key == "return") then
             if(control.console.text:len() == 0) then return end
             load(control.console.text)()
@@ -306,25 +316,20 @@ function control.onPreRender()
         player.movement.targetRotation = fixAngle(control.camera.angle[1]+l_resultRot)
     end
     if(player.movement.rotation ~= player.movement.targetRotation) then
-        player.movement.rotation = interpolateAngles(player.movement.targetRotation,player.movement.rotation,0.925)
+        player.movement.rotation = interpolateAngles(player.movement.targetRotation,player.movement.rotation,1.0-0.075*(60.0/render.getFPS()))
         modelSetRotation(player.model,0,player.movement.rotation,0)
     end
     
     if(physicsGetEnabled()) then
         player.position.x,player.position.y,player.position.z = modelGetPosition(player.model,true)
         local l_vx,l_vy,l_vz = collisionGetVelocity(player.collision)
-        if(l_state) then
-            l_vx = math.lerp(5.0*math.sin(player.movement.rotation),l_vx,0.6)
-            l_vz = math.lerp(5.0*math.cos(player.movement.rotation),l_vz,0.6)
-        else
-            l_vx = math.lerp(0.0,l_vx,0.6)
-            l_vz = math.lerp(0.0,l_vz,0.6)
-        end
+        l_vx = l_state and 5.625*math.sin(player.movement.rotation) or 0.0
+        l_vz = l_state and 5.625*math.cos(player.movement.rotation) or 0.0
         collisionSetVelocity(player.collision,l_vx,l_vy,l_vz)
     else
         if(l_state) then
             player.position.x,player.position.y,player.position.z = modelGetPosition(player.controller)
-            local l_moveSpeed = (60.0/render.getFPS())*0.0625
+            local l_moveSpeed = (60.0/render.getFPS())*0.09375
             player.position.x,player.position.z = player.position.x+l_moveSpeed*math.sin(player.movement.rotation),player.position.z+l_moveSpeed*math.cos(player.movement.rotation)
             modelSetPosition(player.controller,player.position.x,player.position.y,player.position.z)
             player.position.y = player.position.y-10.0001583/2.0
@@ -335,11 +340,10 @@ function control.onPreRender()
         modelPlayAnimation(player.model)
         player.movement.animation = l_newAnimation
     end
-        
     
     --Update player's camera
     if(player.movement.cameraDepth ~= player.movement.cameraDepthEnd) then
-        player.movement.cameraDepth = math.lerp(player.movement.cameraDepthEnd,player.movement.cameraDepth,0.9)
+        player.movement.cameraDepth = math.lerp(player.movement.cameraDepthEnd,player.movement.cameraDepth,1.0-0.1*(60.0/render.getFPS()))
     end
     control.camera.position.x,control.camera.position.y,control.camera.position.z =
         player.position.x-player.movement.cameraDepth*control.camera.direction.x+1.5*math.sin(control.camera.angle[1]-math.pi/2),
@@ -379,11 +383,9 @@ function control.joypad.onJoypadConnect(jid,state)
     if(state == 1) then
         addEventHandler("onJoypadButton",control.joypad.onJoypadButton)
         addEventHandler("onJoypadAxis",control.joypad.onJoypadAxis)
-        print("Joypad connected",jid,state)
     else
         removeEventHandler("onJoypadButton",control.joypad.onJoypadButton)
         removeEventHandler("onJoypadAxis",control.joypad.onJoypadAxis)
-        print("Joypad disconnected",jid,state)
     end
 end
 
@@ -398,29 +400,30 @@ function control.joypad.onJoypadButton(jid,jbutton,jstate)
         end
     end
 end
-function control.joypad.onJoypadAxis(jid,jaxis,jvalue)
-    print("onJoypadAxis",jid,jaxis,jvalue)
+
+function control.onWindowFocus(focus)
+    if(focus == 0) then
+        control.resetControls()
+    end
 end
 
 function control.init()
+    control.keyFunc = {
+        ["w"] = control.func.forward,
+        ["s"] = control.func.backward,
+        ["d"] = control.func.right,
+        ["a"] = control.func.left,
+        ["space"] = control.func.jump,
+        ["lalt"] = control.func.lock,
+        ["n"] = control.func.physicsState,
+        ["q"] = control.func.physicsJump,
+        ["esc"] = control.func.close,
+        ["tilde"] = control.func.console
+    }
+    
     setCursorMode("hl")
     
-    addEventHandler("onKeyPress",control.onKeyPress)
-    addEventHandler("onMouseKeyPress",control.onMouseKeyPress)
-    addEventHandler("onMouseKeyPress",control.grab.onMouseKeyPress)
-    addEventHandler("onMouseScroll",control.onMouseScroll)
-    addEventHandler("onCursorMove",control.onCursorMove)
-    
-    if(isJoypadConnected(0)) then
-        addEventHandler("onJoypadButton",control.joypad.onJoypadButton)
-        addEventHandler("onJoypadAxis",control.joypad.onJoypadAxis)
-    end
-    addEventHandler("onJoypadConnect",control.joypad.onJoypadConnect)
-    
-    addEventHandler("onPreRender",control.onPreRender)
-    
     player.model = model.dummy
-    
     player.controller = modelCreate()
     modelSetPosition(player.controller,0.0,5.0,0.0)
     player.collision = collisionCreate("cylinder",100.0, 0.1,10.0001583/2.0)
@@ -429,8 +432,21 @@ function control.init()
     physicsSetModelsCollidable(player.controller,player.model,false)
     modelAttach(player.model,player.controller)
     modelSetPosition(player.model,0.0,-10.0001583/2.0,0.0) -- offset from cylinder center
-    
     player.animation = animation.dummy
+    
+    addEventHandler("onKeyPress",control.onKeyPress)
+    addEventHandler("onMouseKeyPress",control.onMouseKeyPress)
+    addEventHandler("onMouseKeyPress",control.grab.onMouseKeyPress)
+    addEventHandler("onMouseScroll",control.onMouseScroll)
+    addEventHandler("onCursorMove",control.onCursorMove)
+    addEventHandler("onWindowFocus",control.onWindowFocus)
+    
+    if(isJoypadConnected(0)) then
+        addEventHandler("onJoypadButton",control.joypad.onJoypadButton)
+    end
+    addEventHandler("onJoypadConnect",control.joypad.onJoypadConnect)
+    
+    addEventHandler("onPreRender",control.onPreRender)
 end
 addEventHandler("onEngineStart",control.init)
 

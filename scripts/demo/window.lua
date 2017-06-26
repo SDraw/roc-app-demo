@@ -12,7 +12,6 @@ addEventHandler("onEngineStart",window.init)
 function window.updateSize(width,height)
     window.size[1],window.size[2] = width,height
 end
-
 function window.getSize()
     return window.size[1],window.size[2]
 end
