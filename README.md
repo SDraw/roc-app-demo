@@ -1,5 +1,8 @@
 Demo scene resource for [RunOnCoal engine](https://github.com/SDraw/run-on-coal).
 
+# WARNING
+Engine was switched to Lua OOP, this resource will be rewritten soon.
+
 ### Controls
 * **W,A,S,D:** Movement.
 * **Alt:** Cursor lock/unlock.
