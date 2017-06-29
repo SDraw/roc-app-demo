@@ -118,9 +118,9 @@ function control.func.left(state)
 end
 function control.func.jump(state)
     if(state == 1) then
-        local l_vx,l_vy,l_vz = collisionGetVelocity(player.collision)
+        local l_vx,l_vy,l_vz = player.collision:getVelocity()
         l_vy = l_vy+9.8
-        collisionSetVelocity(player.collision,l_vx,l_vy,l_vz)
+        player.collision:setVelocity(l_vx,l_vy,l_vz)
     end
 end
 
@@ -173,13 +173,13 @@ end
 function control.onMouseKeyPress(key,action)
     if(control.cursor.lock) then
         if(key == "left" and action ~= 0) then
-            if(control.hit.endX and type(control.hit.element) == "userdata") then
-                if(elementGetType(control.hit.element) == "model") then
-                    local l_col = modelGetCollision(control.hit.element)
+            if(control.hit.endX and control.hit.element) then
+                if(control.hit.element:getType() == "Model") then
+                    local l_col = control.hit.element:getCollision()
                     if(l_col) then
-                        local l_mass = collisionGetMass(l_col)*20.0
-                        local l_px,l_py,l_pz = collisionGetPosition(l_col)
-                        collisionApplyImpulse(l_col,
+                        local l_mass = l_col:getMass()*20.0
+                        local l_px,l_py,l_pz = l_col:getPosition()
+                        l_col:applyImpulse(
                             control.camera.direction.x*l_mass,control.camera.direction.y*l_mass,control.camera.direction.z*l_mass,
                             control.hit.endX-l_px,control.hit.endY-l_py,control.hit.endZ-l_pz
                         )
@@ -193,23 +193,25 @@ end
 function control.grab.onMouseKeyPress(key,action)
     if(control.cursor.lock) then
         if(key == "right" and action ~= 0) then
-            if(not control.grab.state and type(control.hit.element) == "userdata" and elementGetType(control.hit.element) == "model") then
-                if(control.hit.element ~= player.model and control.hit.element ~= player.controller) then
+            if(not control.grab.state and control.hit.element) then
+                if(control.hit.element:getType() == "Model" and control.hit.element ~= player.model and control.hit.element ~= player.controller) then
                     control.grab.state = true
                     control.grab.element = control.hit.element
-                    local l_px,l_py,l_pz = modelGetPosition(control.grab.element,true)
+                    local l_px,l_py,l_pz = control.hit.element:getPosition(true)
                     l_px,l_py,l_pz = l_px-control.camera.position.x,l_py-control.camera.position.y,l_pz-control.camera.position.z
                     control.grab.distance = math.sqrt(l_px*l_px+l_py*l_py+l_pz*l_pz)
-                    local l_collision = modelGetCollision(control.grab.element)
+                    local l_collision = control.grab.element:getCollision()
                     if(l_collision) then
-                        collisionSetMotionType(l_collision,"kinematic")
+                        l_collision:setMotionType("kinematic")
                     end
                 end
             else
                 control.grab.state = false
-                local l_collision = modelGetCollision(control.grab.element)
-                if(l_collision) then
-                    collisionSetMotionType(l_collision,"default")
+                if(control.grab.element) then
+                    local l_collision = control.grab.element:getCollision()
+                    if(l_collision) then
+                        l_collision:setMotionType("default")
+                    end
                 end
                 control.grab.element = false
                 control.grab.distance = 0.0
@@ -278,7 +280,7 @@ function control.onMouseScroll(f_wheel,f_delta)
             end
         elseif(isKeyPressed("ralt")) then
             control.camera.fov = math.clamp(control.camera.fov-math.pi/128*f_delta,g_cameraDownLimitFOV,g_cameraUpLimitFOV)
-            cameraSetFOV(scene.getMainCamera(),control.camera.fov)
+            scene.getMainCamera():setFOV(control.camera.fov)
         else
             player.movement.cameraDepthEnd = math.clamp(player.movement.cameraDepthEnd-f_delta/2.0,0,32)
         end
@@ -309,27 +311,26 @@ function control.onPreRender()
     end
     if(player.movement.rotation ~= player.movement.targetRotation) then
         player.movement.rotation = interpolateAngles(player.movement.targetRotation,player.movement.rotation,1.0-0.075*(60.0/render.getFPS()))
-        modelSetRotation(player.model,0,player.movement.rotation,0)
+        player.model:setRotation(0,player.movement.rotation,0)
     end
     
+    player.position.x,player.position.y,player.position.z = player.controller:getPosition()
     if(physicsGetEnabled()) then
-        player.position.x,player.position.y,player.position.z = modelGetPosition(player.model,true)
-        local l_vx,l_vy,l_vz = collisionGetVelocity(player.collision)
+        local l_vx,l_vy,l_vz = player.collision:getVelocity()
         l_vx = l_state and 5.625*math.sin(player.movement.rotation) or 0.0
         l_vz = l_state and 5.625*math.cos(player.movement.rotation) or 0.0
-        collisionSetVelocity(player.collision,l_vx,l_vy,l_vz)
+        player.collision:setVelocity(l_vx,l_vy,l_vz)
     else
         if(l_state) then
-            player.position.x,player.position.y,player.position.z = modelGetPosition(player.controller)
             local l_moveSpeed = (60.0/render.getFPS())*0.09375
             player.position.x,player.position.z = player.position.x+l_moveSpeed*math.sin(player.movement.rotation),player.position.z+l_moveSpeed*math.cos(player.movement.rotation)
-            modelSetPosition(player.controller,player.position.x,player.position.y,player.position.z)
-            player.position.y = player.position.y-10.0001583/2.0
+            player.controller:setPosition(player.position.x,player.position.y,player.position.z)
+            --player.position.y = player.position.y-10.0001583/2.0
         end
     end
     if(player.movement.animation ~= l_newAnimation) then
-        modelSetAnimation(player.model,player.animation[l_newAnimation])
-        modelPlayAnimation(player.model)
+        player.model:setAnimation(player.animation[l_newAnimation])
+        player.model:playAnimation()
         player.movement.animation = l_newAnimation
     end
     
@@ -337,13 +338,15 @@ function control.onPreRender()
     if(player.movement.cameraDepth ~= player.movement.cameraDepthEnd) then
         player.movement.cameraDepth = math.lerp(player.movement.cameraDepthEnd,player.movement.cameraDepth,1.0-0.1*(60.0/render.getFPS()))
     end
+    
+    local l_px,l_py,l_pz = player.model:getPosition(true)
     control.camera.position.x,control.camera.position.y,control.camera.position.z =
-        player.position.x-player.movement.cameraDepth*control.camera.direction.x+1.5*math.sin(control.camera.angle[1]-math.pi/2),
-        player.position.y+8.5-player.movement.cameraDepth*control.camera.direction.y,
-        player.position.z-player.movement.cameraDepth*control.camera.direction.z+1.5*math.cos(control.camera.angle[1]-math.pi/2)
+        l_px-player.movement.cameraDepth*control.camera.direction.x+1.5*math.sin(control.camera.angle[1]-math.pi/2),
+        l_py+8.5-player.movement.cameraDepth*control.camera.direction.y,
+        l_pz-player.movement.cameraDepth*control.camera.direction.z+1.5*math.cos(control.camera.angle[1]-math.pi/2)
         
-    cameraSetPosition(scene.getMainCamera(),control.camera.position.x,control.camera.position.y,control.camera.position.z)
-    cameraSetDirection(scene.getMainCamera(),control.camera.direction.x,control.camera.direction.y,control.camera.direction.z)
+    scene.getMainCamera():setPosition(control.camera.position.x,control.camera.position.y,control.camera.position.z)
+    scene.getMainCamera():setDirection(control.camera.direction.x,control.camera.direction.y,control.camera.direction.z)
     
     --Update hit detection
     control.hit.endX,control.hit.endY,control.hit.endZ,
@@ -357,14 +360,14 @@ function control.onPreRender()
     
     --Update grabbing
     if(control.grab.element) then
-        modelSetPosition(control.grab.element,
+        control.grab.element:setPosition(
             control.camera.position.x+control.camera.direction.x*control.grab.distance,
             control.camera.position.y+control.camera.direction.y*control.grab.distance,
             control.camera.position.z+control.camera.direction.z*control.grab.distance
         )
-        local l_col = modelGetCollision(control.grab.element)
+        local l_col = control.grab.element:getCollision()
         if(l_col) then
-            collisionSetVelocity(l_col,0.0,0.0,0.0)
+            l_col:setVelocity(0.0,0.0,0.0)
         end
     end
 end
@@ -383,11 +386,11 @@ end
 
 function control.joypad.onJoypadButton(jid,jbutton,jstate)
     if(jid == 0 and jbutton == 0 and jstate == 1) then
-        local l_col = modelGetCollision(model.rigid_body[#model.rigid_body])
+        local l_col = model.rigid_body[#model.rigid_body]:getCollision()
         if(l_col) then
-            local l_x,l_y,l_z = collisionGetVelocity(l_col)
+            local l_x,l_y,l_z = l_col:getVelocity()
             l_y = l_y+9.8
-            collisionSetVelocity(l_col,l_x,l_y,l_z)
+            l_col:setVelocity(l_x,l_y,l_z)
         end
     end
 end
@@ -415,14 +418,14 @@ function control.init()
     setCursorMode("hl")
     
     player.model = model.dummy
-    player.controller = modelCreate()
-    modelSetPosition(player.controller,0.0,5.0,0.0)
-    player.collision = collisionCreate("cylinder",100.0, 0.1,10.0001583/2.0)
-    collisionSetAngularFactor(player.collision,0.0,0.0,0.0)
-    collisionAttach(player.collision,player.controller)
-    physicsSetModelsCollidable(player.controller,player.model,false)
-    modelAttach(player.model,player.controller)
-    modelSetPosition(player.model,0.0,-10.0001583/2.0,0.0) -- offset from cylinder center
+    player.controller = Model()
+    player.controller:setPosition(0.0,10.0001583/2.0,0.0)
+    player.collision = Collision("cylinder",100.0, 0.1,10.0001583/2.0)
+    player.collision:setAngularFactor(0.0,0.0,0.0)
+    player.collision:attach(player.controller)
+    player.controller:setCollidable(player.model,false)
+    player.model:attach(player.controller)
+    player.model:setPosition(0.0,-10.0001583/2.0,0.0) -- offset from cylinder center
     player.animation = animation.dummy
     
     addEventHandler("onKeyPress",control.onKeyPress)

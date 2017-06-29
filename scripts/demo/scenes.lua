@@ -2,36 +2,36 @@ scene = {}
 
 function scene.init()
     scene.main = {}
-    scene.main.scene = sceneCreate()
-    scene.main.light = lightCreate()
-    lightSetParams(scene.main.light,0.5,1.0,0.5,16.0)
-    lightSetColor(scene.main.light,1.0,1.0,1.0)
-    lightSetDirection(scene.main.light,-0.707106,-0.707106,0.0)
-    scene.main.camera = cameraCreate("perspective")
-    cameraSetPosition(scene.main.camera,0.0,5.0,20.0)
-    cameraSetDirection(scene.main.camera,0.0,0.0,-1.0)
-    cameraSetFOV(scene.main.camera,math.pi/4)
+    scene.main.scene = Scene()
+    scene.main.light = Light()
+    scene.main.light:setParams(0.5,1.0,0.5,16.0)
+    scene.main.light:setColor(1.0,1.0,1.0)
+    scene.main.light:setDirection(-0.707106,-0.707106,0.0)
+    scene.main.camera = Camera("perspective")
+    scene.main.camera:setPosition(0.0,5.0,20.0)
+    scene.main.camera:setDirection(0.0,0.0,-1.0)
+    scene.main.camera:setFOV(math.pi/4)
     scene.main.temp = { getWindowSize() }
-    cameraSetAspectRatio(scene.main.camera,scene.main.temp[1]/scene.main.temp[2])
+    scene.main.camera:setAspectRatio(scene.main.temp[1]/scene.main.temp[2])
     scene.main.temp = nil
-    cameraSetDepth(scene.main.camera,0.2,300.0)
-    sceneSetLight(scene.main.scene,scene.main.light)
-    sceneSetCamera(scene.main.scene,scene.main.camera)
+    scene.main.camera:setDepth(0.2,300.0)
+    scene.main.scene:setLight(scene.main.light)
+    scene.main.scene:setCamera(scene.main.camera)
     addEventHandler("onWindowResize",scene.updateMainAspectRatio)
     
     scene.shadow = {}
-    scene.shadow.scene = sceneCreate()
-    scene.shadow.camera = cameraCreate("orthogonal")
-    cameraSetPosition(scene.shadow.camera,0.0,0.0,0.0)
-    cameraSetDirection(scene.shadow.camera,-0.707106,-0.707106,0.0)
-    cameraSetOrthoParams(scene.shadow.camera,-32.0,32.0,-32.0,32.0)
-    cameraSetDepth(scene.shadow.camera,-50.0,50.0)
-    sceneSetCamera(scene.shadow.scene,scene.shadow.camera)
+    scene.shadow.scene = Scene()
+    scene.shadow.camera = Camera("orthogonal")
+    scene.shadow.camera:setPosition(0.0,0.0,0.0)
+    scene.shadow.camera:setDirection(-0.707106,-0.707106,0.0)
+    scene.shadow.camera:setOrthoParams(-32.0,32.0,-32.0,32.0)
+    scene.shadow.camera:setDepth(-50.0,50.0)
+    scene.shadow.scene:setCamera(scene.shadow.camera)
 end
 addEventHandler("onEngineStart",scene.init)
 
 function scene.updateMainAspectRatio(width,height)
-    cameraSetAspectRatio(scene.main.camera,width/height)
+    scene.main.camera:setAspectRatio(width/height)
 end
 
 function scene.getMainScene()

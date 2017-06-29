@@ -2,8 +2,8 @@ animation = {}
 
 function animation.init()
     animation.dummy = {
-        idle = animationCreate("animations/dummy_idle.raf"),
-        walk = animationCreate("animations/dummy_walk.raf")
+        idle = Animation("animations/dummy_idle.raf"),
+        walk = Animation("animations/dummy_walk.raf")
     }
 end
 addEventHandler("onEngineStart",animation.init)

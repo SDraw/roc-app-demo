@@ -1,7 +1,7 @@
 target = {}
 
 function target.init()
-    target.shadow = rtCreate(1024,1024,0,"depth","linear")
+    target.shadow = RenderTarget(1024,1024,0,"depth","linear")
 end
 addEventHandler("onEngineStart",target.init)
 

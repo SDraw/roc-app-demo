@@ -19,21 +19,21 @@ end
 function sound.updateBackground()
     if(not sound.background) then
         sound.index = (sound.index+1)%#sound.music+1
-        sound.background = soundCreate("sound/"..sound.music[sound.index]..".ogg")
-        soundSetVolume(sound.background,0.0)
-        soundPlay(sound.background)
-        sound.length = soundGetDuration(sound.background)
+        sound.background = Sound("sound/"..sound.music[sound.index]..".ogg")
+        sound.background:setVolume(0.0)
+        sound.background:play()
+        sound.length = sound.background:getDuration()
     else
-        local l_state = soundGetState(sound.background)
+        local l_state = sound.background:getState()
         if(l_state == "playing") then
-            local l_time = soundGetTime(sound.background)
+            local l_time = sound.background:getTime()
             if(l_time <= 3.0) then
-                soundSetVolume(sound.background,(l_time/3.0)*100.0)
+                sound.background:setVolume((l_time/3.0)*100.0)
             elseif(l_time >= sound.length-3.0) then
-                soundSetVolume(sound.background,(sound.length-l_time)/3.0*100.0)
+                sound.background:setVolume((sound.length-l_time)/3.0*100.0)
             end
         elseif(l_state == "stopped") then
-            elementDestroy(sound.background)
+            sound.background:destroy()
             sound.background = false
         end
     end

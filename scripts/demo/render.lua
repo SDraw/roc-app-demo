@@ -45,10 +45,10 @@ function render.stage.shadow()
     setActiveShader(shader.getShadowShader())
     setActiveScene(scene.getShadowScene())
 
-    modelDraw(model.plane,false,true)
-    modelDraw(model.dummy,false,true)
+    model.plane:draw(false)
+    model.dummy:draw(false)
     for _,v in ipairs(model.rigid_body) do
-        modelDraw(v,false,true)
+        v:draw(false)
     end
 end
 function render.stage.main()
@@ -58,45 +58,45 @@ function render.stage.main()
     
     setActiveShader(shader.getSkyboxShader())
     setActiveScene(scene.getMainScene())
-    modelDraw(model.skybox,false) -- Skybox has no-depth materials
+    model.skybox:draw(false) -- Skybox has no-depth materials
     
     setActiveShader(shader.getCloudsShader())
-    cameraSetDepth(scene.getMainCamera(),1.0,2000.0)
+    scene.getMainCamera():setDepth(1.0,2000.0)
     setActiveScene(scene.getMainScene())
-    modelDraw(model.clouds,true) -- Clouds has no-depth materials
+    model.clouds:draw() -- Clouds has no-depth materials
     
     setActiveShader(shader.getMainShader())
-    cameraSetDepth(scene.getMainCamera(),0.2,300.0)
+    scene.getMainCamera():setDepth(0.2,300.0)
     setActiveScene(scene.getMainScene())
     local l_camera = scene.getShadowCamera()
-    shader.updateMainShadowProjection(cameraGetProjectionMatrix(l_camera))
-    shader.updateMainShadowView(cameraGetViewMatrix(l_camera))
+    shader.updateMainShadowProjection(l_camera:getProjectionMatrix())
+    shader.updateMainShadowView(l_camera:getViewMatrix())
 
-    modelDraw(model.plane,true,true)
-    modelDraw(model.dummy,true,true)
+    model.plane:draw()
+    model.dummy:draw()
     for _,v in ipairs(model.rigid_body) do
-        modelDraw(v,true,true)
+        v:draw()
     end
     for _,v in ipairs(model.cycloid) do
-        modelDraw(v,true,true)
+        v:draw()
     end
     
     setActiveShader(shader.getFireShader())
     setActiveScene(scene.getMainScene())
-    modelDraw(model.fire,true,true)
+    model.fire:draw()
 end
 function render.stage.gui()
     local l_ww,l_wh = window.getSize()
     setActiveShader(shader.getTextureShader())
-    drawableDraw(texture.logo,10,16,256,36, 0, 1,1,1,0.75)
+    texture.logo:draw(10,16,256,36, 0, 1,1,1,0.75)
     if(control.isConsoleVisible()) then
-        drawableDraw(texture.box,0,0,l_ww,16)
+        texture.box:draw(0,0,l_ww,16)
     end
     if(control.isCursorLocked()) then
         if(control.isHitDetected()) then
-            drawableDraw(texture.crosshair.fill,l_ww/2-12,l_wh/2-12,24,24)
+            texture.crosshair.fill:draw(l_ww/2-12,l_wh/2-12,24,24)
         else
-            drawableDraw(texture.crosshair.free,l_ww/2-12,l_wh/2-12,24,24)
+            texture.crosshair.free:draw(l_ww/2-12,l_wh/2-12,24,24)
         end
     end
 
@@ -105,7 +105,7 @@ function render.stage.gui()
     render.info.draw(l_wh)
 
     if(control.isConsoleVisible()) then
-        fontDraw(font.console,8.0,4.0,"> "..control.getConsoleText()..((render.var.time%0.5 >= 0.25) and "|" or ""))
+        font.console:draw(8.0,4.0,"> "..control.getConsoleText()..((render.var.time%0.5 >= 0.25) and "|" or ""))
     end
 end
 
@@ -120,7 +120,7 @@ function render.info.update()
         render.info[6].data = string.format("%.4f,%.4f,%.4f",control.getHitPosition())
         render.info[7].data = string.format("%.4f,%.4f,%.4f",control.getHitNormal())
         local l_hitElement = control.getHitElement()
-        render.info[8].data = (type(l_hitElement) == "userdata") and elementGetType(l_hitElement).." -> "..tostring(l_hitElement) or tostring(l_hitElement)
+        render.info[8].data = l_hitElement and l_hitElement:getType().." -> "..tostring(l_hitElement) or ""
     else
         render.info[6].data = ""
         render.info[7].data = ""
@@ -132,14 +132,14 @@ function render.info.draw(height)
     local l_line = height-15.0
     for k,v in ipairs(render.info) do
         if(string.len(v.data) > 0) then
-            fontDraw(font.default,11.0,l_line,v.title..v.data, 0.0,0.0,0.0,1.0)
+            font.default:draw(11.0,l_line,v.title..v.data, 0.0,0.0,0.0,1.0)
             l_line = l_line-12.0
         end
     end
     l_line = height-14.0
     for k,v in ipairs(render.info) do
         if(string.len(v.data) > 0) then
-            fontDraw(font.default,10.0,l_line,v.title..v.data)
+            font.default:draw(10.0,l_line,v.title..v.data)
             l_line = l_line-12.0
         end
     end
@@ -161,7 +161,7 @@ function render.fade.processIn()
     setActiveShader(shader.texture)
     setRenderTarget()
     local l_ww,l_wh = window.getSize()
-    drawableDraw(texture.black,0,0,l_ww,l_wh, 0.0, 1.0,1.0,1.0,1.0-l_dif/3.0)
+    texture.black:draw(0,0,l_ww,l_wh, 0.0, 1.0,1.0,1.0,1.0-l_dif/3.0)
 end
 
 function render.fade.close()
@@ -176,7 +176,7 @@ function render.fade.processOut()
     local l_ww,l_wh = window.getSize()
     setActiveShader(shader.texture)
     setRenderTarget()
-    drawableDraw(texture.black,0,0,l_ww,l_wh, 0.0, 1.0,1.0,1.0,l_dif/3.0)
+    texture.black:draw(0,0,l_ww,l_wh, 0.0, 1.0,1.0,1.0,l_dif/3.0)
     sound.setGlobalVolume((1.0-l_dif/3.0)*100.0)
     if(l_dif > 3.0) then
         closeWindow()
