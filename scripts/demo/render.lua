@@ -41,7 +41,7 @@ end
 
 function render.stage.shadow()
     setRenderTarget(target.getShadowTarget())
-    clearRenderArea("depth")
+    clearRenderArea(true,false)
     setActiveShader(shader.getShadowShader())
     setActiveScene(scene.getShadowScene())
 
@@ -53,8 +53,7 @@ function render.stage.shadow()
 end
 function render.stage.main()
     setRenderTarget()
-    clearRenderArea("depth")
-    clearRenderArea("color")
+    clearRenderArea()
     
     setActiveShader(shader.getSkyboxShader())
     setActiveScene(scene.getMainScene())
