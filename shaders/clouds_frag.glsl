@@ -15,10 +15,7 @@ const float gCloudsFadeDif = gCloudsFadeEnd-gCloudsFadeStart;
 
 void main() 
 {
-    vec2 l_distance = vec2(distance(tCloudsPosition.xz,gCameraPosition.xz),1.f);
-    if(l_distance.x > gCloudsFadeStart)
-    {
-        l_distance.y = 1.f-(clamp(l_distance.x,gCloudsFadeStart,gCloudsFadeEnd)-gCloudsFadeStart)/gCloudsFadeDif;
-    }
-    gOutput = vec4(gLightColor.xyz,texture(gTexture0,mod(tUV+gTime/512.f,1.f)).r*l_distance.y);
+    float l_distance = clamp(distance(tCloudsPosition.xz,gCameraPosition.xz),gCloudsFadeStart,gCloudsFadeEnd);
+    float l_intensity = (gCloudsFadeEnd-l_distance)/gCloudsFadeDif;
+    gOutput = vec4(gLightColor.xyz,texture(gTexture0,mod(tUV+gTime/512.f,1.f)).r*l_intensity);
 }

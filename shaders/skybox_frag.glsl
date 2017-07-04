@@ -9,6 +9,10 @@ uniform vec3 gCameraPosition;
 const vec3 gSkyColorA = vec3(0.73791f,0.73791f,0.73791f);
 const vec3 gSkyColorB = vec3(0.099862f,0.423188f,1.f);
 const float gSkyPreMix = 0.25f;
+vec3 getSkyColor(in vec3 f_normal)
+{
+    return mix(gSkyColorA,mix(gSkyColorA,gSkyColorB,gSkyPreMix),f_normal.y*0.5f+0.5f); 
+}
 
 mat4 getSaturation(float saturation)
 {
@@ -23,12 +27,5 @@ mat4 getSaturation(float saturation)
 
 void main() 
 {
-    gOutput = getSaturation(1.5f)*vec4(
-        mix(
-            gSkyColorA,
-            mix(gSkyColorA,gSkyColorB,gSkyPreMix),
-            normalize(tSkyPosition-gCameraPosition).y*0.5f+0.5f
-        )*gLightColor.rgb,
-        1.f
-    );
+    gOutput = getSaturation(1.5f)*vec4(getSkyColor(normalize(tSkyPosition-gCameraPosition))*gLightColor.rgb,1.f);
 }

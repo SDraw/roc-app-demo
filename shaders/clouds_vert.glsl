@@ -13,7 +13,8 @@ uniform mat4 gModelMatrix;
 
 void main()
 {
+    vec4 l_vertexPosition = vec4(gVertexPosition,1.0);
     tUV = gVertexUV;
-    tCloudsPosition = (gViewMatrix*gModelMatrix*vec4(gVertexPosition,1.0)).xyz;
-    gl_Position = gProjectionMatrix*gViewMatrix*gModelMatrix*vec4(gVertexPosition,1.0);
+    tCloudsPosition = (gViewMatrix*gModelMatrix*l_vertexPosition).xyz;
+    gl_Position = gProjectionMatrix*gViewMatrix*gModelMatrix*l_vertexPosition;
 }

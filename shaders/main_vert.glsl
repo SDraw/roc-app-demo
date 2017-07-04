@@ -27,6 +27,7 @@ uniform mat4 gShadowProjectionMatrix;
 
 void main()
 {
+    vec4 l_vertexPosition = vec4(gVertexPosition,1.0);
     mat4 rigMatrix = mat4(1.f);
     if(gAnimated == true)
     {
@@ -37,6 +38,6 @@ void main()
     }
     tUV = gVertexUV;
     tNormal = normalize((gModelMatrix*rigMatrix*vec4(gVertexNormal,0.0)).xyz);
-    tShadowCoord = (gShadowProjectionMatrix*gShadowViewMatrix*gModelMatrix*rigMatrix*vec4(gVertexPosition,1.0));
-    gl_Position = gProjectionMatrix*gViewMatrix*gModelMatrix*rigMatrix*vec4(gVertexPosition,1.0);
+    tShadowCoord = gShadowProjectionMatrix*gShadowViewMatrix*gModelMatrix*rigMatrix*l_vertexPosition;
+    gl_Position = gProjectionMatrix*gViewMatrix*gModelMatrix*rigMatrix*l_vertexPosition;
 }
