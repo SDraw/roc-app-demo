@@ -374,7 +374,7 @@ end
 
 control.joypad = {}
 
-function control.joypad.onJoypadConnect(jid,state)
+function control.joypad.onJoypadStateChange(jid,state)
     if(jid == 0) then
         if(state == 1) then
             addEventHandler("onJoypadButton",control.joypad.onJoypadButton)
@@ -438,7 +438,7 @@ function control.init()
     if(isJoypadConnected(0)) then
         addEventHandler("onJoypadButton",control.joypad.onJoypadButton)
     end
-    addEventHandler("onJoypadConnect",control.joypad.onJoypadConnect)
+    addEventHandler("onJoypadStateChange",control.joypad.onJoypadStateChange)
     
     addEventHandler("onPreRender",control.onPreRender)
 end
