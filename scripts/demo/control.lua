@@ -127,11 +127,7 @@ end
 function control.func.lock(state)
     if(state == 1) then
         control.cursor.lock = not control.cursor.lock
-        if(control.cursor.lock) then
-            setCursorMode("hl")
-        else
-            setCursorMode("vu")
-        end
+        setCursorMode(not control.cursor.lock, control.cursor.lock)
     end
 end
 
@@ -415,7 +411,7 @@ function control.init()
         ["tilde"] = control.func.console
     }
     
-    setCursorMode("hl")
+    setCursorMode(false,true)
     
     player.model = model.dummy
     player.controller = Model()
