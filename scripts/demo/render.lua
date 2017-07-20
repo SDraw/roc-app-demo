@@ -128,20 +128,14 @@ function render.info.update()
 end
 function render.info.draw(height)
     -- Two passes, outline is madness
-    local l_line = height-15.0
+    local l_text = ""
     for k,v in ipairs(render.info) do
-        if(string.len(v.data) > 0) then
-            font.default:draw(11.0,l_line,v.title..v.data, 0.0,0.0,0.0,1.0)
-            l_line = l_line-12.0
+        if(v.data:len() > 0) then
+            l_text = l_text..v.title..": "..v.data.."\n"
         end
     end
-    l_line = height-14.0
-    for k,v in ipairs(render.info) do
-        if(string.len(v.data) > 0) then
-            font.default:draw(10.0,l_line,v.title..v.data)
-            l_line = l_line-12.0
-        end
-    end
+    font.default:draw(11.0,height-15.0,l_text, 0.0,0.0,0.0)
+    font.default:draw(10.0,height-14.0,l_text)
 end
 
 render.fade = {}
