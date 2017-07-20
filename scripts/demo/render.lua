@@ -11,14 +11,14 @@ function render.init()
     addEventHandler("onRender",render.stage.main)
     addEventHandler("onRender",render.stage.gui)
 
-    render.info[1] = { title = "FPS: ", data = "" }
-    render.info[2] = { title = "Camera position: ", data = "" }
-    render.info[3] = { title = "Camera direction: ", data = "" }
-    render.info[4] = { title = "Camera up: ", data = "" }
-    render.info[5] = { title = "Tick: ", data = "" }
-    render.info[6] = { title = "RayCast hit: ", data = "" }
-    render.info[7] = { title = "RayCast normal: ", data = "" }
-    render.info[8] = { title = "RayCast object: ", data = "" }
+    render.info[1] = { title = "FPS", data = "" }
+    render.info[2] = { title = "Camera position", data = "" }
+    render.info[3] = { title = "Camera direction", data = "" }
+    render.info[4] = { title = "Camera up", data = "" }
+    render.info[5] = { title = "Tick", data = "" }
+    render.info[6] = { title = "RayCast hit", data = "" }
+    render.info[7] = { title = "RayCast normal", data = "" }
+    render.info[8] = { title = "RayCast object", data = "" }
 
     render.fade.init = true
     render.fade.start = 0
