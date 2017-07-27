@@ -1,4 +1,5 @@
-Demo scene resource for [RunOnCoal engine](https://github.com/SDraw/run-on-coal).
+![](http://i.imgur.com/wBCdLMR.png)
+## Demo scene resource for [RunOnCoal game engine](../../../run-on-coal).
 
 ### Controls
 * **W,A,S,D:** Movement.
