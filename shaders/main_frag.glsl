@@ -12,25 +12,16 @@ uniform int gMaterialType;
 
 //Custom variables
 uniform sampler2DShadow gTexture3;
-uniform float gShadowSamples;
+//uniform float gShadowSamples;
 uniform samplerCube gTexture5;
 
 const float gTexMapScale = 1.f/1024.f;
 float getShadow()
 {
-    vec3 l_coord = tShadowCoord.xyz*0.5f+0.5f;
-    if(clamp(l_coord.xy,0.f,1.f) != l_coord.xy) return 1.f;
-    vec2 l_sample = vec2(-gShadowSamples);
     float l_shadowIntensity = 0.f;
-    l_coord.z -= 0.0025f;
-    for(; l_sample.y <= gShadowSamples; l_sample.y += 1.0)
-    {
-        for(; l_sample.x <= gShadowSamples; l_sample.x += 1.0)
-        {      
-            l_shadowIntensity += textureProj(gTexture3,vec4(l_coord.xy+l_sample*gTexMapScale,l_coord.z,tShadowCoord.w));
-        }
-    }
-    return (l_shadowIntensity/(2.f*gShadowSamples+1.f));
+    vec3 l_shadowCoord = tShadowCoord.xyz*0.5f+0.5f;
+    l_shadowCoord.z -= 0.00125f;
+    return texture(gTexture3,l_shadowCoord);
 }
 
 float getShading(in vec3 f_normal)
