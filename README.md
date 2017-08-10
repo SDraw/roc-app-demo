@@ -1,4 +1,3 @@
-![](http://i.imgur.com/wBCdLMR.png)
 ## Demo scene resource for [RunOnCoal game engine](../../../run-on-coal).
 
 ### Controls
