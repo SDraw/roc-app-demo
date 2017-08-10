@@ -119,8 +119,10 @@ function WorldManager.onPreRender()
             10+10.0*(math.sin(l_angle)-math.sin(7*l_angle)/7),
             18.0
         )
-        l_cubeRot:setEuler(0,l_angle,math.pi2-l_angle)
+        l_cubeRot:setEuler(0,0,l_angle)
         v:setRotation(l_cubeRot:getXYZW())
+        local l_scale = math.abs(math.cos(l_angle*8.0))
+        v:setScale(l_scale,l_scale,l_scale)
     end
 end
 

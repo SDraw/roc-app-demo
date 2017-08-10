@@ -13,6 +13,8 @@ function ControlCamera.new(ud1)
         m_center = { x = 0, y = 0, z = 0 },
         m_angle = { 0, 0 },
         m_distance = 1.0,
+        m_distanceLerp = 1.0,
+        m_offset = 0,
         m_direction = { x = 0, y = 0.0, z = 1.0 },
         m_up = { x = 0, y = 0, z = 0 },
         m_position = { x = 0, y = 0, z = 1.0 },
@@ -45,10 +47,17 @@ function ControlCamera:getAngles()
     return self.m_angle[1],self.m_angle[2]
 end
 
+function ControlCamera:setOffset(val1)
+    self.m_offset = val1
+end
+function ControlCamera:getOffset()
+    return self.m_offset
+end
+
 function ControlCamera:setDistance(val1)
     self.m_distance = math.clamp(val1,self.ms_limitDistanceDown,self.ms_limitDistanceUp)
 end
-function ControlCamera:getDistance(val1)
+function ControlCamera:getDistance()
     return self.m_distance
 end
 
@@ -66,7 +75,7 @@ function ControlCamera:getDirection()
     return self.m_direction.x,self.m_direction.y,self.m_direction.z
 end
 
-function ControlCamera:update()
+function ControlCamera:update(val1) -- FPS
     local l_dir = math.cos(self.m_angle[2])
     self.m_direction.x = l_dir*math.sin(self.m_angle[1])
     self.m_direction.y = math.sin(self.m_angle[2])
@@ -77,9 +86,13 @@ function ControlCamera:update()
     self.m_up.y = math.cos(self.m_angle[2])
     self.m_up.z = l_dir*math.cos(self.m_angle[1])
     
-    self.m_position.x = self.m_center.x-self.m_direction.x*self.m_distance
-    self.m_position.y = self.m_center.y-self.m_direction.y*self.m_distance
-    self.m_position.z = self.m_center.z-self.m_direction.z*self.m_distance
+    if(math.epsilonNotEqual(self.m_distanceLerp,self.m_distance)) then
+        self.m_distanceLerp = math.lerp(self.m_distanceLerp,self.m_distance,math.clamp(7.5/val1,0,1))
+    end
+    
+    self.m_position.x = self.m_center.x-self.m_direction.x*self.m_distanceLerp + math.sin(self.m_angle[1]-math.piHalf)*self.m_offset
+    self.m_position.y = self.m_center.y-self.m_direction.y*self.m_distanceLerp
+    self.m_position.z = self.m_center.z-self.m_direction.z*self.m_distanceLerp + math.cos(self.m_angle[1]-math.piHalf)*self.m_offset
     
     self.m_camera:setPosition(self.m_position.x,self.m_position.y,self.m_position.z)
     self.m_camera:setDirection(self.m_direction.x,self.m_direction.y,self.m_direction.z)
@@ -176,7 +189,9 @@ function ControlManager.onGeometryCacheLoad()
     setCursorMode(false,true)
     
     self.ms_camera = ControlCamera.new(SceneManager:getCamera("main"))
-    self.ms_camera:setDistance(2.5)
+    self.ms_camera:setDistance(4.0)
+    self.ms_camera:setOffset(1.5)
+    
     self.ms_shadowCamera = SceneManager:getCamera("shadow")
     
     self.ms_controlModel = WorldManager:getModel("dummy")
@@ -219,6 +234,7 @@ end
 function ControlManager.onPreRender()
     local self = ControlManager
     
+    local l_fps = RenderManager:getFPS()
     -- Update controlled model
     if(ControlState:isMoving()) then
         local l_rot,_ = self.ms_camera:getAngles()
@@ -226,11 +242,11 @@ function ControlManager.onPreRender()
         
         local l_modelRot = Quat(self.ms_controlModel:getRotation())
         local l_dirRot = Quat(0,l_rot,0)
-        l_modelRot:slerp(l_dirRot, 0.1)
+        l_modelRot:slerp(l_dirRot, math.clamp(6.0/l_fps,0.0,1.0))
         self.ms_controlModel:setRotation(l_modelRot:getXYZW())
         
         local l_moveZ,l_moveX = getVectorFromAngle2D(l_rot)
-        local l_moveSpeed = 5.625/RenderManager:getFPS() -- 5.625 units per second
+        local l_moveSpeed = 5.625/l_fps -- 5.625 units per second
         local l_px,l_py,l_pz = self.ms_controlModel:getPosition()
         l_px,l_pz = l_px+l_moveX*l_moveSpeed,l_pz+l_moveZ*l_moveSpeed
         self.ms_controlModel:setPosition(l_px,l_py,l_pz)
@@ -248,7 +264,7 @@ function ControlManager.onPreRender()
     
     local l_px,l_py,l_pz = self.ms_controlModel:getPosition()
     self.ms_camera:setCenter(l_px,l_py+8.5,l_pz)
-    self.ms_camera:update()
+    self.ms_camera:update(l_fps)
     self.ms_shadowCamera:setPosition(self.ms_camera:getPosition())
 end
 

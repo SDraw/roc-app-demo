@@ -7,5 +7,5 @@ uniform vec4 gColor;
 
 void main()
 {
- gOutput = texture(gTexture0,tUV)*gColor;
+    gOutput = texture(gTexture0,tUV)*gColor;
 }
