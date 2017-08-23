@@ -66,7 +66,7 @@ function SceneManager:setActive(str1)
         setActiveScene(l_sceneData.m_scene)
         
         if(str1 == "main") then
-            l_sceneData.m_shader:setUniformValue("gShadowViewProjectionMatrix","mat4",self.ms_cache.shadow.m_camera:getViewProjectionMatrix())
+            l_sceneData.m_shader:setUniformValue("gShadowViewProjectionMatrix",self.ms_cache.shadow.m_camera:getViewProjectionMatrix())
         end
     end
 end
