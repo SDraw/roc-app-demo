@@ -61,7 +61,7 @@ end
 function SceneManager:setActive(str1)
     local l_sceneData = self.ms_cache[str1]
     if(l_sceneData) then
-        setRenderTarget(l_sceneData.m_target and l_sceneData.m_target or nil)
+        setActiveTarget(l_sceneData.m_target)
         setActiveShader(l_sceneData.m_shader)
         setActiveScene(l_sceneData.m_scene)
         
