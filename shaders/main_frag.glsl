@@ -18,10 +18,14 @@ uniform samplerCube gTexture5;
 const float gTexMapScale = 1.f/1024.f;
 float getShadow()
 {
-    float l_shadowIntensity = 0.f;
+    float l_shadowIntensity = 1.f;
     vec3 l_shadowCoord = tShadowCoord.xyz*0.5f+0.5f;
-    l_shadowCoord.z -= 0.00125f;
-    return texture(gTexture3,l_shadowCoord);
+    if(clamp(l_shadowCoord.xyz,0.f,1.f) == l_shadowCoord) // If fragment is in shadow projection
+    {
+        l_shadowCoord.z -= 0.00125f;
+        l_shadowIntensity = texture(gTexture3,l_shadowCoord);
+    }
+    return l_shadowIntensity;
 }
 
 float getShading(in vec3 f_normal)
