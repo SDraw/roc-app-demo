@@ -13,6 +13,11 @@ function GuiManager.init()
     self.ms_texture = {
         box = Texture("rgba","textures/box.png","nearest",true)
     }
+    self.ms_scene = Scene()
+    self.ms_camera = Camera("screen")
+    self.ms_camera:setOrthoParams(0,self.ms_windowSize[1],0,self.ms_windowSize[2])
+    self.ms_scene:setCamera(self.ms_camera)
+    self.ms_scene:setShader(self.ms_shader)
     
     RenderManager:addToQueue("gui",self.onRender_load)
     
@@ -25,6 +30,7 @@ function GuiManager.onWindowResize(val1,val2)
     local self = GuiManager
     
     self.ms_windowSize[1],self.ms_windowSize[2] = val1,val2
+    self.ms_camera:setOrthoParams(0,self.ms_windowSize[1],0,self.ms_windowSize[2])
 end
 
 function GuiManager.onGeometryCacheLoad()
@@ -37,7 +43,7 @@ end
 function GuiManager.onRender_load()
     local self = GuiManager
     
-    setActiveShader(self.ms_shader)
+    self.ms_scene:setActive()
     self.ms_texture.box:draw(0,0,self.ms_windowSize[1],self.ms_windowSize[2])
     local _,l_dif = math.modf(getTime())
     self.ms_font.default:draw(16,16, "Loading "..(l_dif >= 0.25 and "." or "")..(l_dif >= 0.5 and "." or "")..(l_dif >= 0.75 and "." or ""))
@@ -46,7 +52,7 @@ end
 function GuiManager.onRender_main()
     local self = GuiManager
     
-    setActiveShader(self.ms_shader)
+    self.ms_scene:setActive()
     
     local l_text = string.format("FPS: %.0f\n",RenderManager:getFPS())
     l_text = l_text..string.format("Camera position: %.4f, %.4f, %.4f\n",ControlManager:getCameraPosition())

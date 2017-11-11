@@ -12,6 +12,10 @@ function GeometryCache.init()
         cone = Geometry("models/cone.rmf",true),
         cylinder = Geometry("models/cylinder.rmf",true),
         sphere = Geometry("models/icosphere.rmf",true),
+        rope = Geometry("models/rope.rmf",true),
+        --clouds = Geometry("models/clouds.rmf",true),
+        --water = Geometry("models/water_plane.rmf",true),
+        --fire = Geometry("models/flame.rmf",true),
         dummy = Geometry("models/dummy.rmf",true)
     }
     self.ms_cacheCount = 0

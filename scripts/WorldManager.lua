@@ -29,6 +29,10 @@ function WorldManager.onGeometryCacheLoad()
     self.ms_modelCache.skybox = Model(GeometryCache:get("skybox"))
     self.ms_modelCache.skybox:setRotation(Quat(0.0,math.pi*1.25,0.0):getXYZW())
     
+    --self.ms_modelCache.clouds = Model(GeometryCache:get("clouds"))
+    --self.ms_modelCache.clouds:setPosition(0.0,300.0,0.0)
+    --self.ms_modelCache.clouds:setScale(10.0,1.0,10.0)
+    
     self.ms_modelCache.plane = Model(GeometryCache:get("plane"))
     
     self.ms_modelCache.rigid = {}
@@ -71,19 +75,30 @@ function WorldManager.onGeometryCacheLoad()
     self.ms_modelCache.cycloid = {}
     for i=1,36 do
         table.insert(self.ms_modelCache.cycloid,Model(GeometryCache:get("cube")))
+        --if(i-1 > 0) then
+        --    self.ms_modelCache.cycloid[i]:attach(self.ms_modelCache.cycloid[i-1])
+        --end
     end
     self.ms_cycloidAngle = 0
     
     self.ms_modelCache.dummy = Model(GeometryCache:get("dummy"))
     self.ms_modelCache.dummy:setPosition(-12.0,0.0,-8.0)
     
+    --self.ms_modelCache.water = Model(GeometryCache:get("water"))
+    --self.ms_modelCache.water:setPosition(0.0,5.0,0.0)
+    --self.ms_modelCache.water:setScale(2.0,1.0,2.0)
+    --
+    --self.ms_modelCache.fire = Model(GeometryCache:get("fire"))
+    
     -- Set animations
-    local l_model = self.ms_modelCache.dummy
-    if(l_model) then
-        local l_animation = AnimationCache:get("dummy","idle")
-        if(l_animation) then
-            l_model:setAnimation(l_animation)
-            l_model:playAnimation()
+    for _,v in ipairs({ "dummy" }) do
+        local l_model = self.ms_modelCache[v]
+        if(l_model) then
+            local l_animation = AnimationCache:get(v,"idle")
+            if(l_animation) then
+                l_model:setAnimation(l_animation)
+                l_model:playAnimation()
+            end
         end
     end
     
@@ -96,6 +111,15 @@ function WorldManager.onGeometryCacheLoad()
     RenderManager:addToQueue("main",self.ms_modelCache.cycloid)
     
     RenderManager:addToQueue("skybox",self.ms_modelCache.skybox)
+    
+    --for i=1,128 do
+    --    local l_test = Model(GeometryCache:get("dummy"))
+    --    l_test:setAnimation(AnimationCache:get("dummy","walk"))
+    --    l_test:playAnimation()
+    --    l_test:setAnimationProperty("progress",math.random())
+    --    l_test:setPosition(20+math.random()*128,0,20+math.random()*128)
+    --    RenderManager:addToQueue("main",l_test)
+    --end
     
     -- Add prerender event
     addEventHandler("onPreRender",self.onPreRender)
@@ -113,7 +137,7 @@ function WorldManager.onPreRender()
     local l_cubeRot = Quat(0,0,0,1)
     self.ms_cycloidAngle  = math.fmod(self.ms_cycloidAngle+g_worldCycloidCubeStep*(60.0/RenderManager:getFPS()),math.pi2)
     for k,v in ipairs(self.ms_modelCache.cycloid) do
-        local l_angle = self.ms_cycloidAngle+g_worldCycloidStep*k
+        local l_angle = math.fmod(self.ms_cycloidAngle+g_worldCycloidStep*k,math.pi2)
         v:setPosition(
             10.0*(math.cos(l_angle)+math.cos(7*l_angle)/7),
             10+10.0*(math.sin(l_angle)-math.sin(7*l_angle)/7),

@@ -31,6 +31,8 @@ function SceneManager.init()
     self.ms_cache.shadow.m_camera:setOrthoParams(-32.0,32.0,-32.0,32.0)
     self.ms_cache.shadow.m_camera:setDepth(-50.0,50.0)
     self.ms_cache.shadow.m_scene:setCamera(self.ms_cache.shadow.m_camera)
+    self.ms_cache.shadow.m_scene:setRenderTarget(self.ms_cache.shadow.m_target)
+    self.ms_cache.shadow.m_scene:setShader(self.ms_cache.shadow.m_shader)
     
     self.ms_cache.main.m_light:setParams(0.5,1.0,0.5,16.0)
     self.ms_cache.main.m_light:setColor(1.0,1.0,1.0)
@@ -44,10 +46,12 @@ function SceneManager.init()
     
     self.ms_cache.main.m_scene:setLight(self.ms_cache.main.m_light)
     self.ms_cache.main.m_scene:setCamera(self.ms_cache.main.m_camera)
+    self.ms_cache.main.m_scene:setShader(self.ms_cache.main.m_shader)
     self.ms_cache.main.m_shader:attach(self.ms_cache.shadow.m_target,"gTexture3")
     
     self.ms_cache.skybox.m_scene:setCamera(self.ms_cache.main.m_camera)
     self.ms_cache.skybox.m_scene:setLight(self.ms_cache.main.m_light)
+    self.ms_cache.skybox.m_scene:setShader(self.ms_cache.skybox.m_shader)
     
     addEventHandler("onWindowResize",self.onWindowResize)
 end
@@ -61,9 +65,7 @@ end
 function SceneManager:setActive(str1)
     local l_sceneData = self.ms_cache[str1]
     if(l_sceneData) then
-        setActiveTarget(l_sceneData.m_target)
-        setActiveShader(l_sceneData.m_shader)
-        setActiveScene(l_sceneData.m_scene)
+        l_sceneData.m_scene:setActive()
         
         if(str1 == "main") then
             l_sceneData.m_shader:setUniformValue("gShadowViewProjectionMatrix",self.ms_cache.shadow.m_camera:getViewProjectionMatrix())

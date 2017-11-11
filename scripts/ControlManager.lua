@@ -1,8 +1,8 @@
 -- ControlCamera class
 ControlCamera = {}
 ControlCamera.__index = ControlCamera
-ControlCamera.ms_limitDirectionUp = math.pi/2.0-0.005
-ControlCamera.ms_limitDirectionDown = -math.pi/2.0+0.005
+ControlCamera.ms_limitDirectionUp = math.pi/2.0
+ControlCamera.ms_limitDirectionDown = -math.pi/2.0
 ControlCamera.ms_limitFOVUp = math.pi-0.05
 ControlCamera.ms_limitFOVDown = 0.005
 ControlCamera.ms_limitDistanceDown = 1.0
@@ -96,7 +96,12 @@ function ControlCamera:update(val1) -- FPS
     
     self.m_camera:setPosition(self.m_position.x,self.m_position.y,self.m_position.z)
     self.m_camera:setDirection(self.m_direction.x,self.m_direction.y,self.m_direction.z)
+    self.m_camera:setUpDirection(self.m_up.x,self.m_up.y,self.m_up.z)
     self.m_camera:setFOV(self.m_fov)
+    
+    -- Dizzy fun
+    --local l_dizzyAngle = math.piHalf+math.sin(getTime()*16)*(math.pi/16)
+    --self.m_camera:setUpDirection(math.cos(l_dizzyAngle),math.sin(l_dizzyAngle),0)
 end
 ----
 -- ControlState static class
