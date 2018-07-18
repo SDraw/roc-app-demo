@@ -245,9 +245,7 @@ function ControlManager.onPreRender()
         local l_rot,_ = self.ms_camera:getAngles()
         l_rot = l_rot+ControlState:getDirectionAngle()
         
-        local l_modelRot = Quat(self.ms_controlModel:getRotation())
-        local l_dirRot = Quat(0,l_rot,0)
-        l_modelRot:slerp(l_dirRot, math.clamp(6.0/l_fps,0.0,1.0))
+        local l_modelRot = Quat(self.ms_controlModel:getRotation()):slerp(Quat(0,l_rot,0), math.clamp(6.0/l_fps,0.0,1.0))
         self.ms_controlModel:setRotation(l_modelRot:getXYZW())
         
         local l_moveZ,l_moveX = getVectorFromAngle2D(l_rot)
