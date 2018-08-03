@@ -29,46 +29,42 @@ function WorldManager.onGeometryCacheLoad()
     self.ms_modelCache.skybox = Model(GeometryCache:get("skybox"))
     self.ms_modelCache.skybox:setRotation(Quat(0.0,math.pi*1.25,0.0):getXYZW())
     
-    --self.ms_modelCache.clouds = Model(GeometryCache:get("clouds"))
-    --self.ms_modelCache.clouds:setPosition(0.0,300.0,0.0)
-    --self.ms_modelCache.clouds:setScale(10.0,1.0,10.0)
-    
     self.ms_modelCache.plane = Model(GeometryCache:get("plane"))
     
     self.ms_modelCache.rigid = {}
     for i=1,25 do
-        local l_model = Model(GeometryCache:get("cone"))
-        l_model:setPosition(4.0,1.0+2.0*(i-1),4.0)
         local l_col = Collision("cone",1.0, 1.0,1.0)
+        l_col:setPosition(4.0,1.0+2.0*(i-1),4.0)
         l_col:setFriction(1.0)
-        l_col:attach(l_model)
+        local l_model = Model(GeometryCache:get("cone"))
+        l_model:setCollision(l_col)
         table.insert(self.ms_modelCache.rigid,l_model)
     end
     for i=1,25 do
         local l_disp = math.pow(-1,i%2)
-        local l_model = Model(GeometryCache:get("cylinder"))
-        l_model:setPosition(4.0+0.25*l_disp,1.0+2.0*(i-1),-4.0+0.25*l_disp)
         local l_col = Collision("cylinder",1.0, 1.0,0.5,1.0)
+        l_col:setPosition(4.0+0.25*l_disp,1.0+2.0*(i-1),-4.0+0.25*l_disp)
         l_col:setFriction(1.0)
-        l_col:attach(l_model)
+        local l_model = Model(GeometryCache:get("cylinder"))
+        l_model:setCollision(l_col)
         table.insert(self.ms_modelCache.rigid,l_model)
     end
     for i=1,25 do
-        local l_model = Model(GeometryCache:get("cube"))
-        l_model:setPosition(-4.0+0.5*math.pow(-1,i%2),1.0+2.0*(i-1),4.0)
-        l_model:setRotation(Quat(0,math.pi*((i-50)/50),0):getXYZW())
         local l_col = Collision("box",10.0, 1.0,1.0,1.0)
+        l_col:setPosition(-4.0+0.5*math.pow(-1,i%2),1.0+2.0*(i-1),4.0)
+        l_col:setRotation(Quat(0,math.pi*((i-50)/50),0):getXYZW())
         l_col:setFriction(1.0)
-        l_col:attach(l_model)
+        local l_model = Model(GeometryCache:get("cube"))
+        l_model:setCollision(l_col)
         table.insert(self.ms_modelCache.rigid,l_model)
     end
     for i=1,25 do
         local l_disp = math.pow(-1,i%2)
-        local l_model = Model(GeometryCache:get("sphere"))
-        l_model:setPosition(-4.0+0.25*l_disp,1.0+2.0*(i-1),-4.0+0.25*l_disp)
         local l_col = Collision("sphere",0.25, 1.0)
+        l_col:setPosition(-4.0+0.25*l_disp,1.0+2.0*(i-1),-4.0+0.25*l_disp)
         l_col:setFriction(1.0)
-        l_col:attach(l_model)
+        local l_model = Model(GeometryCache:get("sphere"))
+        l_model:setCollision(l_col)
         table.insert(self.ms_modelCache.rigid,l_model)
     end
     

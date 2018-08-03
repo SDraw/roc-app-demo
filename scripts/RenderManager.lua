@@ -50,6 +50,9 @@ function RenderManager.onRender()
     for _,v in ipairs(self.ms_queue.main) do
         v:draw()
     end
+    if(PhysicsManager:isDebugEnabled()) then
+        drawPhysics()
+    end
     
     -- GUI pass
     for _,v in ipairs(self.ms_queue.gui) do

@@ -98,10 +98,6 @@ function ControlCamera:update(val1) -- FPS
     self.m_camera:setDirection(self.m_direction.x,self.m_direction.y,self.m_direction.z)
     self.m_camera:setUpDirection(self.m_up.x,self.m_up.y,self.m_up.z)
     self.m_camera:setFOV(self.m_fov)
-    
-    -- Dizzy fun
-    --local l_dizzyAngle = math.piHalf+math.sin(getTime()*16)*(math.pi/16)
-    --self.m_camera:setUpDirection(math.cos(l_dizzyAngle),math.sin(l_dizzyAngle),0)
 end
 ----
 -- ControlState static class
@@ -199,11 +195,19 @@ function ControlManager.onGeometryCacheLoad()
     
     self.ms_shadowCamera = SceneManager:getCamera("shadow")
     
+    self.ms_controlCollision = Collision("cone",10.0, 1.5,9.0)
+    self.ms_controlCollision:setAngularFactor(0.0,0.0,0.0)
+    self.ms_controlCollision:setPosition(0.0,4.5,0.0)
+    
     self.ms_controlModel = WorldManager:getModel("dummy")
+    self.ms_controlModel:setCollision(self.ms_controlCollision)
+    self.ms_controlModel:setPosition(0.0,-4.5,0.0)
+    
     self.ms_controlModelAnim = {
         idle = AnimationCache:get("dummy","idle"),
         walk = AnimationCache:get("dummy","walk")
     }
+    
     ControlState.init()
     
     addEventHandler("onCursorMove",self.onCursorMove)
@@ -245,14 +249,14 @@ function ControlManager.onPreRender()
         local l_rot,_ = self.ms_camera:getAngles()
         l_rot = l_rot+ControlState:getDirectionAngle()
         
-        local l_modelRot = Quat(self.ms_controlModel:getRotation()):slerp(Quat(0,l_rot,0), math.clamp(6.0/l_fps,0.0,1.0))
-        self.ms_controlModel:setRotation(l_modelRot:getXYZW())
+        local l_modelRot = Quat(self.ms_controlCollision:getRotation()):slerp(Quat(0,l_rot,0), math.clamp(6.0/l_fps,0.0,1.0))
+        self.ms_controlCollision:setRotation(l_modelRot:getXYZW())
         
         local l_moveZ,l_moveX = getVectorFromAngle2D(l_rot)
         local l_moveSpeed = 5.625/l_fps -- 5.625 units per second
-        local l_px,l_py,l_pz = self.ms_controlModel:getPosition()
+        local l_px,l_py,l_pz = self.ms_controlCollision:getPosition()
         l_px,l_pz = l_px+l_moveX*l_moveSpeed,l_pz+l_moveZ*l_moveSpeed
-        self.ms_controlModel:setPosition(l_px,l_py,l_pz)
+        self.ms_controlCollision:setPosition(l_px,l_py,l_pz)
         
         if(self.ms_controlModel:getAnimation() ~= self.ms_controlModelAnim.walk) then
             self.ms_controlModel:setAnimation(self.ms_controlModelAnim.walk)
@@ -265,8 +269,8 @@ function ControlManager.onPreRender()
         end
     end
     
-    local l_px,l_py,l_pz = self.ms_controlModel:getPosition()
-    self.ms_camera:setCenter(l_px,l_py+8.5,l_pz)
+    local l_px,l_py,l_pz = self.ms_controlCollision:getPosition()
+    self.ms_camera:setCenter(l_px,l_py+4.0,l_pz)
     self.ms_camera:update(l_fps)
     self.ms_shadowCamera:setPosition(self.ms_camera:getPosition())
 end
