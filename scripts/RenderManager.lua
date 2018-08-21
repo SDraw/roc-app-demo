@@ -51,6 +51,10 @@ function RenderManager.onRender()
         v:draw()
     end
     if(PhysicsManager:isDebugEnabled()) then
+        SceneManager:setActive("physics")
+        if(PhysicsManager:getDebugMode() == "xray") then
+            clearRenderArea(true,false)
+        end
         drawPhysics()
     end
     

@@ -5,6 +5,7 @@ function PhysicsManager.init()
     local self = PhysicsManager
     
     self.ms_debug = false
+    self.ms_debugMode = "normal"
     
     physicsSetFloorEnabled(true)
     physicsSetEnabled(true)
@@ -17,6 +18,9 @@ addEventHandler("onEngineStart",PhysicsManager.init)
 
 function PhysicsManager:isDebugEnabled()
     return self.ms_debug
+end
+function PhysicsManager:getDebugMode()
+    return self.ms_debugMode
 end
 
 function PhysicsManager.onKeyPress_state(str1,val1)
@@ -40,8 +44,10 @@ end
 
 function PhysicsManager.onKeyPress_debug(str1,val1)
     local self = PhysicsManager
-    if(str1 == '3' and val1 == 1) then
+    if((str1 == '3') and (val1 == 1)) then
         self.ms_debug = not self.ms_debug
+    elseif((str1 == '4') and (val1 == 1) and self.ms_debug) then
+        self.ms_debugMode = ((self.ms_debugMode == "normal") and "xray" or "normal")
     end
 end
 

@@ -23,6 +23,12 @@ function SceneManager.init()
             m_light = Light(),
             m_camera = Camera("perspective"),
             m_shader = Shader("shaders/main_vert.glsl","shaders/main_frag.glsl")
+        },
+        physics = {
+            m_scene = Scene(),
+            m_light = false,
+            m_camera = false,
+            m_shader = Shader("shaders/physics_vert.glsl","shaders/physics_frag.glsl")
         }
     }
     
@@ -54,6 +60,9 @@ function SceneManager.init()
     self.ms_cache.skybox.m_scene:setLight(self.ms_cache.main.m_light)
     self.ms_cache.skybox.m_scene:setShader(self.ms_cache.skybox.m_shader)
     self.ms_cache.skybox.m_scene:setSkyGradient(0.73791,0.73791,0.73791, 0.449218,0.710937,1.0)
+    
+    self.ms_cache.physics.m_scene:setCamera(self.ms_cache.main.m_camera)
+    self.ms_cache.physics.m_scene:setShader(self.ms_cache.physics.m_shader)
     
     addEventHandler("onWindowResize",self.onWindowResize)
 end

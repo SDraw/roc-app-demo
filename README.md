@@ -7,3 +7,4 @@
   * **1:** Enable/disable physics.
   * **2:** Object chaos.
   * **3:** Physics debug.
+  * **4:** Change physics debug mode between 'normal' and 'x-ray' 
