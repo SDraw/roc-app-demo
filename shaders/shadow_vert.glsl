@@ -13,13 +13,13 @@ layout (std140) uniform gBonesUniform
 
 void main()
 {
-    mat4 rigMatrix = mat4(1.f);
+    mat4 l_rigMatrix = mat4(1.f);
     if(gAnimated == true)
     {
-        rigMatrix = gBoneMatrix[gVertexBoneIndex.x]*gVertexBoneWeight.x;
-        rigMatrix += gBoneMatrix[gVertexBoneIndex.y]*gVertexBoneWeight.y;
-        rigMatrix += gBoneMatrix[gVertexBoneIndex.z]*gVertexBoneWeight.z;
-        rigMatrix += gBoneMatrix[gVertexBoneIndex.w]*gVertexBoneWeight.w;
+        l_rigMatrix = gBoneMatrix[gVertexBoneIndex.x]*gVertexBoneWeight.x;
+        l_rigMatrix += gBoneMatrix[gVertexBoneIndex.y]*gVertexBoneWeight.y;
+        l_rigMatrix += gBoneMatrix[gVertexBoneIndex.z]*gVertexBoneWeight.z;
+        l_rigMatrix += gBoneMatrix[gVertexBoneIndex.w]*gVertexBoneWeight.w;
     }
-    gl_Position = gViewProjectionMatrix*gModelMatrix*rigMatrix*vec4(gVertexPosition,1.0);
+    gl_Position = gViewProjectionMatrix*gModelMatrix*l_rigMatrix*vec4(gVertexPosition,1.0);
 }

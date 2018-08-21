@@ -47,11 +47,13 @@ function SceneManager.init()
     self.ms_cache.main.m_scene:setLight(self.ms_cache.main.m_light)
     self.ms_cache.main.m_scene:setCamera(self.ms_cache.main.m_camera)
     self.ms_cache.main.m_scene:setShader(self.ms_cache.main.m_shader)
+    self.ms_cache.main.m_scene:setSkyGradient(0.73791,0.73791,0.73791, 0.449218,0.710937,1.0)
     self.ms_cache.main.m_shader:attach(self.ms_cache.shadow.m_target,"gTexture3")
     
     self.ms_cache.skybox.m_scene:setCamera(self.ms_cache.main.m_camera)
     self.ms_cache.skybox.m_scene:setLight(self.ms_cache.main.m_light)
     self.ms_cache.skybox.m_scene:setShader(self.ms_cache.skybox.m_shader)
+    self.ms_cache.skybox.m_scene:setSkyGradient(0.73791,0.73791,0.73791, 0.449218,0.710937,1.0)
     
     addEventHandler("onWindowResize",self.onWindowResize)
 end

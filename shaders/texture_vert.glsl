@@ -9,6 +9,6 @@ uniform mat4 gProjectionMatrix;
 
 void main()
 {
- tUV = gVertexUV;
- gl_Position = gProjectionMatrix*gModelMatrix*vec4(gVertexPosition,1.0);
+    tUV = gVertexUV;
+    gl_Position = gProjectionMatrix*gModelMatrix*vec4(gVertexPosition,1.0);
 }  

@@ -26,16 +26,16 @@ uniform mat4 gShadowViewProjectionMatrix;
 void main()
 {
     vec4 l_vertexPosition = vec4(gVertexPosition,1.0);
-    mat4 rigMatrix = mat4(1.f);
+    mat4 l_rigMatrix = mat4(1.f);
     if(gAnimated == true)
     {
-        rigMatrix = gBoneMatrix[gVertexBoneIndex.x]*gVertexBoneWeight.x;
-        rigMatrix += gBoneMatrix[gVertexBoneIndex.y]*gVertexBoneWeight.y;
-        rigMatrix += gBoneMatrix[gVertexBoneIndex.z]*gVertexBoneWeight.z;
-        rigMatrix += gBoneMatrix[gVertexBoneIndex.w]*gVertexBoneWeight.w;
+        l_rigMatrix = gBoneMatrix[gVertexBoneIndex.x]*gVertexBoneWeight.x;
+        l_rigMatrix += gBoneMatrix[gVertexBoneIndex.y]*gVertexBoneWeight.y;
+        l_rigMatrix += gBoneMatrix[gVertexBoneIndex.z]*gVertexBoneWeight.z;
+        l_rigMatrix += gBoneMatrix[gVertexBoneIndex.w]*gVertexBoneWeight.w;
     }
     tUV = gVertexUV;
-    tNormal = normalize((gModelMatrix*rigMatrix*vec4(gVertexNormal,0.0)).xyz);
-    tShadowCoord = gShadowViewProjectionMatrix*gModelMatrix*rigMatrix*l_vertexPosition;
-    gl_Position = gViewProjectionMatrix*gModelMatrix*rigMatrix*l_vertexPosition;
+    tNormal = normalize((gModelMatrix*l_rigMatrix*vec4(gVertexNormal,0.0)).xyz);
+    tShadowCoord = gShadowViewProjectionMatrix*gModelMatrix*l_rigMatrix*l_vertexPosition;
+    gl_Position = gViewProjectionMatrix*gModelMatrix*l_rigMatrix*l_vertexPosition;
 }

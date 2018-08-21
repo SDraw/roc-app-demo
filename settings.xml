@@ -5,4 +5,5 @@
     <param name="fpslimit" value="60"/>
     <param name="vsync" value="false"/>
     <param name="logging" value="true"/>
+    <param name="scripts_dir" value="scripts"/>
 </settings>

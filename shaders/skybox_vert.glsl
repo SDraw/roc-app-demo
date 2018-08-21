@@ -11,7 +11,7 @@ uniform mat4 gModelMatrix;
 
 void main()
 {
-    vec4 l_vertexPosition = vec4(gVertexPosition,1.0);
-    tSkyPosition = (gModelMatrix*l_vertexPosition).xyz;
-    gl_Position = gViewProjectionMatrix*gModelMatrix*l_vertexPosition;
+    vec4 l_vertexPosition = gModelMatrix*vec4(gVertexPosition,1.0);
+    tSkyPosition = l_vertexPosition.xyz;
+    gl_Position = gViewProjectionMatrix*l_vertexPosition;
 }
