@@ -1,7 +1,7 @@
 #version 330 core
 //Default variables
 layout(location = 0) in vec3 gVertexPosition;
-layout(location = 2) in vec3 gVertexNormal;
+layout(location = 1) in vec3 gVertexNormal;
 
 //Output
 out vec3 tColor;
@@ -9,6 +9,7 @@ out vec3 tColor;
 //Default variables
 uniform mat4 gViewProjectionMatrix;
 uniform mat4 gModelMatrix;
+uniform float gTime;
 
 void main()
 {

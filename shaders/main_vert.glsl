@@ -1,8 +1,8 @@
 #version 330 core
 //Default variables
 layout(location = 0) in vec3 gVertexPosition;
-layout(location = 1) in vec2 gVertexUV;
-layout(location = 2) in vec3 gVertexNormal;
+layout(location = 1) in vec3 gVertexNormal;
+layout(location = 2) in vec2 gVertexUV;
 layout(location = 3) in vec4 gVertexBoneWeight;
 layout(location = 4) in ivec4 gVertexBoneIndex;
 
