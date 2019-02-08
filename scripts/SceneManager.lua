@@ -10,25 +10,28 @@ function SceneManager.init()
             m_light = false,
             m_camera = Camera("orthogonal"),
             m_shader = Shader("shaders/shadow_vert.glsl","shaders/shadow_frag.glsl"),
-            m_target = TargetManager:getCached("shadow")
+            m_target = RenderTarget("shadow",1024,1024,"linear")
         },
         skybox = {
             m_scene = Scene(),
             m_light = false,
             m_camera = false,
-            m_shader = Shader("shaders/skybox_vert.glsl","shaders/skybox_frag.glsl")
+            m_shader = Shader("shaders/skybox_vert.glsl","shaders/skybox_frag.glsl"),
+            m_target = false
         },
         main = {
             m_scene = Scene(),
             m_light = Light(),
             m_camera = Camera("perspective"),
-            m_shader = Shader("shaders/main_vert.glsl","shaders/main_frag.glsl")
+            m_shader = Shader("shaders/main_vert.glsl","shaders/main_frag.glsl"),
+            m_target = false
         },
         physics = {
             m_scene = Scene(),
             m_light = false,
             m_camera = false,
-            m_shader = Shader("shaders/physics_vert.glsl","shaders/physics_frag.glsl")
+            m_shader = Shader("shaders/physics_vert.glsl","shaders/physics_frag.glsl"),
+            m_target = false
         }
     }
     
@@ -77,15 +80,32 @@ function SceneManager:setActive(str1)
     local l_sceneData = self.ms_cache[str1]
     if(l_sceneData) then
         l_sceneData.m_scene:setActive()
-        
-        if(str1 == "main") then
-            l_sceneData.m_shader:setUniformValue("gShadowViewProjectionMatrix",self.ms_cache.shadow.m_camera:getViewProjectionMatrix())
-        end
+        l_sceneData.m_scene:draw()
+    end
+end
+function SceneManager:draw(str1)
+    local l_sceneData = self.ms_cache[str1]
+    if(l_sceneData) then
+        l_sceneData.m_scene:draw()
+    end
+end
+
+function SceneManager:addModelToScene(str1,ud1)
+    local l_sceneData = self.ms_cache[str1]
+    if(l_sceneData) then
+        l_sceneData.m_scene:addModel(ud1)
     end
 end
 
 function SceneManager:getCamera(str1)
     return (self.ms_cache[str1] and self.ms_cache[str1].m_camera or false)
+end
+
+function SceneManager:update_S1()
+    self.ms_cache.shadow.m_camera:setPosition(self.ms_cache.main.m_camera:getPosition())
+end
+function SceneManager:update_S2()
+    self.ms_cache.main.m_shader:setUniformValue("gShadowViewProjectionMatrix",self.ms_cache.shadow.m_camera:getViewProjectionMatrix())
 end
 
 SceneManager = setmetatable({},SceneManager)

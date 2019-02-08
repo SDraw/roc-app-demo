@@ -1,6 +1,5 @@
 <meta>
     <script src="WindowManager.lua"/>
-    <script src="TargetManager.lua"/>
     <script src="RenderManager.lua"/>
     <script src="GuiManager.lua"/>
     

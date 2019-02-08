@@ -32,6 +32,11 @@ vec3 getSkyColor(in vec3 f_normal)
     return mix(gSkyGradientDown,gSkyGradientUp,f_normal.y*0.5f+0.5f); 
 }
 
+float cel(float d)
+{
+    return smoothstep(0.35f, 0.37f, d) * 0.4f + smoothstep(0.7f, 0.72f, d) * 0.6f;
+}
+
 vec3 getShading(in vec3 f_normal)
 {
     float l_theta = max(0.f,dot(f_normal,-gLightDirection)*0.5f+0.5f)*getShadow();

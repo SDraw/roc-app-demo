@@ -28,14 +28,13 @@ addEventHandler("onEngineStart",GeometryCache.init)
 function GeometryCache.onGeometryLoad(ud1,bool1)
     local self = GeometryCache
     
-    local l_data = ud1:getData("geometry:cache")
-    if(l_data) then
+    if(ud1:getData("geometry:cache")) then
         ud1:removeData("geometry:cache")
         if(bool1) then
             self.ms_cacheResult = self.ms_cacheResult+1
             if(self.ms_cacheResult == self.ms_cacheCount) then
-                callEvent("onGeometryCacheLoad")
                 removeEventHandler("onGeometryLoad",self.onGeometryLoad)
+                callEvent("onGeometryCacheLoad")
             end
         end
     end

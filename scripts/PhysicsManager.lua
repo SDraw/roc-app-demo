@@ -4,8 +4,8 @@ PhysicsManager.__index = PhysicsManager
 function PhysicsManager.init()
     local self = PhysicsManager
     
-    self.ms_debug = false
-    self.ms_debugMode = "normal"
+    self.ms_drawDebug = false
+    self.ms_drawMode = "normal"
     
     physicsSetFloorEnabled(true)
     physicsSetEnabled(true)
@@ -16,38 +16,32 @@ function PhysicsManager.init()
 end
 addEventHandler("onEngineStart",PhysicsManager.init)
 
-function PhysicsManager:isDebugEnabled()
-    return self.ms_debug
+function PhysicsManager:getDebugDraw()
+    return self.ms_drawDebug
 end
-function PhysicsManager:getDebugMode()
-    return self.ms_debugMode
+function PhysicsManager:getDebugDrawMode()
+    return self.ms_drawMode
 end
 
 function PhysicsManager.onKeyPress_state(str1,val1)
-    if(str1 == '1' and val1 == 1) then
+    if(str1 == 'n' and val1 == 1) then
         physicsSetEnabled(not physicsGetEnabled())
     end
 end
 
 function PhysicsManager.onKeyPress_chaos(str1,val1)
-    if(str1 == '2' and val1 == 1) then
-        for _,v in ipairs(WorldManager:getModel("rigid")) do
-            local l_col = v:getCollision()
-            local l_vx,l_vy,l_vz = l_col:getVelocity()
-            l_vx = l_vx+math.random()*9.8*(math.random() <= 0.5 and -1 or 1)
-            l_vy = l_vy+math.random()*9.8*(math.random() <= 0.5 and -1 or 1)
-            l_vz = l_vz+math.random()*9.8*(math.random() <= 0.5 and -1 or 1)
-            l_col:setVelocity(l_vx,l_vy,l_vz)
-        end
+    if(str1 == 'j' and val1 == 1) then
+        local l_gx,l_gy,l_gz = physicsGetGravity()
+        physicsSetGravity(l_gx,-l_gy,l_gz)
     end
 end
 
 function PhysicsManager.onKeyPress_debug(str1,val1)
     local self = PhysicsManager
-    if((str1 == '3') and (val1 == 1)) then
-        self.ms_debug = not self.ms_debug
-    elseif((str1 == '4') and (val1 == 1) and self.ms_debug) then
-        self.ms_debugMode = ((self.ms_debugMode == "normal") and "xray" or "normal")
+    if(str1 == "f1" and val1 == 1) then
+        self.ms_drawDebug = not self.ms_drawDebug
+    elseif(str1 == "f2" and val1 == 1 and self.ms_drawDebug) then
+        self.ms_drawMode = ((self.ms_drawMode == "normal") and "xray" or "normal")
     end
 end
 
