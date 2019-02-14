@@ -15,10 +15,7 @@ out vec4 tShadowCoord;
 uniform mat4 gViewProjectionMatrix;
 uniform mat4 gModelMatrix;
 uniform bool gAnimated;
-layout (std140) uniform gBonesUniform
-{
-    mat4 gBoneMatrix[227];
-};
+uniform mat4 gBoneMatrix[128];
 
 //Custom variables
 uniform mat4 gShadowViewProjectionMatrix;

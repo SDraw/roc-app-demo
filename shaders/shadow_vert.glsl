@@ -6,10 +6,7 @@ layout(location = 4) in ivec4 gVertexBoneIndex;
 uniform mat4 gViewProjectionMatrix;
 uniform mat4 gModelMatrix;
 uniform bool gAnimated;
-layout (std140) uniform gBonesUniform
-{
-    mat4 gBoneMatrix[227];
-};
+uniform mat4 gBoneMatrix[128];
 
 void main()
 {
