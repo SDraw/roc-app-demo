@@ -1,21 +1,16 @@
-#version 330
-in vec3 tSkyPosition;
+in vec3 tPosition;
 out vec4 gOutput;
 
 // Default uniforms
-uniform vec4 gLightColor;
 uniform vec3 gCameraPosition;
+
+// Custom uniforms
 uniform vec3 gSkyGradientDown;
 uniform vec3 gSkyGradientUp;
 
-vec3 getSkyColor(in vec3 f_normal)
-{
-    return mix(gSkyGradientDown,gSkyGradientUp,f_normal.y*0.5f+0.5f); 
-}
-
 void main() 
 {
-    vec3 l_normal = normalize(tSkyPosition-gCameraPosition);
-    vec3 l_skyColor = getSkyColor(l_normal)*gLightColor.rgb;
+    vec3 l_normal = normalize(tPosition-gCameraPosition);
+    vec3 l_skyColor = mix(gSkyGradientDown,gSkyGradientUp,l_normal.y*0.5f+0.5f);
     gOutput = vec4(l_skyColor,1.f);
 }

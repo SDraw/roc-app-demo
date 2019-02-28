@@ -1,4 +1,3 @@
-#version 330 core
 in vec3 tColor;
 out vec4 gOutput;
 

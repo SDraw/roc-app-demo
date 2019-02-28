@@ -1,4 +1,3 @@
-#version 330 core
 layout(location = 0) in vec3 gVertexPosition;
 layout(location = 3) in vec4 gVertexBoneWeight;
 layout(location = 4) in ivec4 gVertexBoneIndex;
@@ -6,7 +5,7 @@ layout(location = 4) in ivec4 gVertexBoneIndex;
 uniform mat4 gViewProjectionMatrix;
 uniform mat4 gModelMatrix;
 uniform bool gAnimated;
-uniform mat4 gBoneMatrix[128];
+uniform mat4 gBoneMatrix[MAX_BONES];
 
 void main()
 {

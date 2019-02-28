@@ -14,21 +14,27 @@ function SceneManager.init()
         },
         skybox = {
             m_scene = Scene(),
-            m_light = false,
+            m_lights = false,
             m_camera = false,
             m_shader = Shader("shaders/skybox_vert.glsl","shaders/skybox_frag.glsl"),
             m_target = false
         },
         main = {
             m_scene = Scene(),
-            m_light = Light(),
+            m_lights =
+            {
+                Light("directional"), -- main light
+                Light("point"),
+                Light("point"),
+                Light("spotlight")
+            },
             m_camera = Camera("perspective"),
             m_shader = Shader("shaders/main_vert.glsl","shaders/main_frag.glsl"),
             m_target = false
         },
         physics = {
             m_scene = Scene(),
-            m_light = false,
+            m_lights = false,
             m_camera = false,
             m_shader = Shader("shaders/physics_vert.glsl","shaders/physics_frag.glsl"),
             m_target = false
@@ -43,9 +49,22 @@ function SceneManager.init()
     self.ms_cache.shadow.m_scene:setRenderTarget(self.ms_cache.shadow.m_target)
     self.ms_cache.shadow.m_scene:setShader(self.ms_cache.shadow.m_shader)
     
-    self.ms_cache.main.m_light:setParams(0.5,1.0,0.5,16.0)
-    self.ms_cache.main.m_light:setColor(1.0,1.0,1.0)
-    self.ms_cache.main.m_light:setDirection(-0.707106,-0.707106,0.0)
+    self.ms_cache.main.m_lights[1]:setColor(1.0,1.0,1.0, 1.0)
+    self.ms_cache.main.m_lights[1]:setDirection(-0.707106,-0.707106,0.0)
+    
+    self.ms_cache.main.m_lights[2]:setFalloff(0,0,0.125)
+    self.ms_cache.main.m_lights[2]:setColor(0.5,0.25,1.0, 0.75)
+    self.ms_cache.main.m_lights[2]:setPosition(0,5.0,0.0)
+    
+    self.ms_cache.main.m_lights[3]:setFalloff(0,0,0.125)
+    self.ms_cache.main.m_lights[3]:setColor(0.25,0.5,1.0, 0.75)
+    self.ms_cache.main.m_lights[3]:setPosition(0,5.0,0.0)
+    
+    self.ms_cache.main.m_lights[4]:setFalloff(1.0, 0.045, 0.0075)
+    self.ms_cache.main.m_lights[4]:setCutoff(0.75,0.6)
+    self.ms_cache.main.m_lights[4]:setColor(1,0,0, 1)
+    self.ms_cache.main.m_lights[4]:setPosition(0,7.5,0.0)
+    self.ms_cache.main.m_lights[4]:setDirection(0,-1.0,0.0)
     
     self.ms_cache.main.m_camera:setPosition(0,5,-5)
     self.ms_cache.main.m_camera:setDepth(0.2,300.0)
@@ -53,16 +72,19 @@ function SceneManager.init()
     local l_windowSize = { getWindowSize() }
     self.ms_cache.main.m_camera:setAspectRatio(l_windowSize[1]/l_windowSize[2])
     
-    self.ms_cache.main.m_scene:setLight(self.ms_cache.main.m_light)
+    for _,v in ipairs(self.ms_cache.main.m_lights) do
+        self.ms_cache.main.m_scene:addLight(v)
+    end
     self.ms_cache.main.m_scene:setCamera(self.ms_cache.main.m_camera)
     self.ms_cache.main.m_scene:setShader(self.ms_cache.main.m_shader)
-    self.ms_cache.main.m_scene:setSkyGradient(0.73791,0.73791,0.73791, 0.449218,0.710937,1.0)
     self.ms_cache.main.m_shader:attach(self.ms_cache.shadow.m_target,"gTexture3")
+    self.ms_cache.main.m_shader:setUniformValue("gSkyGradientDown", 0.73791,0.73791,0.73791)
+    self.ms_cache.main.m_shader:setUniformValue("gSkyGradientUp", 0.449218,0.710937,1.0)
     
     self.ms_cache.skybox.m_scene:setCamera(self.ms_cache.main.m_camera)
-    self.ms_cache.skybox.m_scene:setLight(self.ms_cache.main.m_light)
     self.ms_cache.skybox.m_scene:setShader(self.ms_cache.skybox.m_shader)
-    self.ms_cache.skybox.m_scene:setSkyGradient(0.73791,0.73791,0.73791, 0.449218,0.710937,1.0)
+    self.ms_cache.skybox.m_shader:setUniformValue("gSkyGradientDown", 0.73791,0.73791,0.73791)
+    self.ms_cache.skybox.m_shader:setUniformValue("gSkyGradientUp", 0.449218,0.710937,1.0)
     
     self.ms_cache.physics.m_scene:setCamera(self.ms_cache.main.m_camera)
     self.ms_cache.physics.m_scene:setShader(self.ms_cache.physics.m_shader)
@@ -99,6 +121,10 @@ end
 
 function SceneManager:getCamera(str1)
     return (self.ms_cache[str1] and self.ms_cache[str1].m_camera or false)
+end
+
+function SceneManager:getLights(str1)
+    return (self.ms_cache[str1] and self.ms_cache[str1].m_lights or false)
 end
 
 function SceneManager:update_S1()

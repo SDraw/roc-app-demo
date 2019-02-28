@@ -1,5 +1,3 @@
-#version 330 core
-
 out float gOutput;
 
 void main() 

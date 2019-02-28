@@ -1,4 +1,3 @@
-#version 330 core
 //Default variables
 layout(location = 0) in vec3 gVertexPosition;
 layout(location = 1) in vec3 gVertexNormal;
@@ -10,12 +9,13 @@ layout(location = 4) in ivec4 gVertexBoneIndex;
 out vec2 tUV;
 out vec3 tNormal;
 out vec4 tShadowCoord;
+out vec3 tPosition;
 
 //Default variables
 uniform mat4 gViewProjectionMatrix;
 uniform mat4 gModelMatrix;
 uniform bool gAnimated;
-uniform mat4 gBoneMatrix[128];
+uniform mat4 gBoneMatrix[MAX_BONES];
 
 //Custom variables
 uniform mat4 gShadowViewProjectionMatrix;
@@ -34,5 +34,6 @@ void main()
     tUV = gVertexUV;
     tNormal = normalize((gModelMatrix*l_rigMatrix*vec4(gVertexNormal,0.0)).xyz);
     tShadowCoord = gShadowViewProjectionMatrix*gModelMatrix*l_rigMatrix*l_vertexPosition;
+    tPosition = (gModelMatrix*l_rigMatrix*l_vertexPosition).xyz;
     gl_Position = gViewProjectionMatrix*gModelMatrix*l_rigMatrix*l_vertexPosition;
 }

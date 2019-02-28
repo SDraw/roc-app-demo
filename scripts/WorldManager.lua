@@ -73,6 +73,10 @@ function WorldManager.onGeometryCacheLoad()
     self.ms_modelCache.dummy:setAnimation(AnimationCache:get("dummy","idle"))
     self.ms_modelCache.dummy:playAnimation()
     
+    self.ms_modelCache.wall = Model(GeometryCache:get("plane"))
+    self.ms_modelCache.wall:setPosition(32,15,0)
+    self.ms_modelCache.wall:setRotation(Quat(0,0,math.piHalf):getXYZW())
+    
     -- Add to render
     for _,v in ipairs({ "shadow", "main" }) do
         SceneManager:addModelToScene(v,self.ms_modelCache.plane)
@@ -81,8 +85,19 @@ function WorldManager.onGeometryCacheLoad()
         end
         SceneManager:addModelToScene(v,self.ms_modelCache.dummy)
     end
+    SceneManager:addModelToScene("main",self.ms_modelCache.wall)
     SceneManager:addModelToScene("skybox",self.ms_modelCache.skybox)
     
+    local l_lights = SceneManager:getLights("main")
+    self.ms_lightCache = {
+        point = {
+            l_lights[2],
+            l_lights[3]
+        },
+        spotlight = l_lights[4]
+    }
+    
+    self.ms_lightCache.spotlight:setPosition(25,15,0)
     
     -- Add prerender event
     addEventHandler("onPreRender",self.onPreRender)
@@ -93,6 +108,12 @@ function WorldManager.onPreRender()
     
     -- Update skybox
     self.ms_modelCache.skybox:setPosition(ControlManager:getCameraPosition())
+    
+    local l_time = getTime()
+    local l_sin,l_cos = math.sin(l_time),math.cos(l_time)
+    self.ms_lightCache.point[1]:setPosition(30,15+10*l_sin,10*l_cos)
+    self.ms_lightCache.point[2]:setPosition(30,15-10*l_sin,-10*l_cos)
+    self.ms_lightCache.spotlight:setDirection(math.abs(l_sin),l_cos,0)
 end
 
 function WorldManager:getModel(str1)
