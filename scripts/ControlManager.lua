@@ -94,7 +94,7 @@ function CharacterCamera:update(val1) -- FPS
     
     self.m_camera:setPosition(self.m_position.x,self.m_position.y,self.m_position.z)
     if(self.m_angle[2] > 0) then
-        self.m_camera:setFOV(self.m_fov+math.pi/4*math.pow(self.m_angle[2]/math.piHalf,2))
+        self.m_camera:setFOV(self.m_fov+math.pi/4*((self.m_angle[2]/math.piHalf)^2))
     else
         self.m_camera:setFOV(self.m_fov)
     end

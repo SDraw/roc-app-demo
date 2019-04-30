@@ -1,0 +1,15 @@
+<module>
+    <script src="scripts/WindowManager.lua"/>
+    <script src="scripts/RenderManager.lua"/>
+    <script src="scripts/GuiManager.lua"/>
+    
+    <script src="scripts/AnimationCache.lua"/>
+    <script src="scripts/GeometryCache.lua"/>
+    
+    <script src="scripts/SceneManager.lua"/>
+    <script src="scripts/WorldManager.lua"/>
+    <script src="scripts/ControlManager.lua"/>
+    <script src="scripts/PhysicsManager.lua"/>
+    
+    <script src="scripts/Utils.lua"/>
+</module>

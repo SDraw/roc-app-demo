@@ -41,7 +41,7 @@ function WorldManager.onGeometryCacheLoad()
         table.insert(self.ms_modelCache.rigid,l_model)
     end
     for i=1,25 do
-        local l_disp = math.pow(-1,i%2)
+        local l_disp = (-1)^(i%2)
         local l_model = Model(GeometryCache:get("cylinder"))
         local l_col = Collision("cylinder",1.0, 1.0,0.5,1.0)
         l_col:setPosition(4.0+0.25*l_disp,1.0+2.0*(i-1),-4.0+0.25*l_disp)
@@ -52,14 +52,14 @@ function WorldManager.onGeometryCacheLoad()
     for i=1,25 do
         local l_model = Model(GeometryCache:get("cube"))
         local l_col = Collision("box",10.0, 1.0,1.0,1.0)
-        l_col:setPosition(-4.0+0.5*math.pow(-1,i%2),1.0+2.0*(i-1),4.0)
+        l_col:setPosition(-4.0+0.5*((-1)^(i%2)),1.0+2.0*(i-1),4.0)
         l_col:setRotation(Quat(0,math.pi*((i-50)/50),0):getXYZW())
         l_col:setFriction(1.0)
         l_model:setCollision(l_col)
         table.insert(self.ms_modelCache.rigid,l_model)
     end
     for i=1,25 do
-        local l_disp = math.pow(-1,i%2)
+        local l_disp = (-1)^(i%2)
         local l_model = Model(GeometryCache:get("sphere"))
         local l_col = Collision("sphere",0.25, 1.0)
         l_col:setPosition(-4.0+0.25*l_disp,1.0+2.0*(i-1),-4.0+0.25*l_disp)
