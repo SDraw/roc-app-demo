@@ -8,4 +8,4 @@
   * **N:** Enable/disable physics.
   * **J:** Invert gravity.
   * **F1:** Physics debug.
-  * **F2:** Change physics debug mode between 'normal' and 'x-ray' 
+  * **F2:** Change physics debug mode between 'normal' and 'X-ray' 
