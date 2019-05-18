@@ -3,8 +3,9 @@
 ### Controls
 * **W,A,S,D:** Movement.
 * **Mouse wheel:** Change camera distance.
+* **Tab**: Unlock cursor
 * **Physics:**
-  * **1:** Enable/disable physics.
-  * **2:** Object chaos.
-  * **3:** Physics debug.
-  * **4:** Change physics debug mode between 'normal' and 'x-ray' 
+  * **N:** Enable/disable physics.
+  * **J:** Invert gravity.
+  * **F1:** Physics debug.
+  * **F2:** Change physics debug mode between 'normal' and 'x-ray' 
