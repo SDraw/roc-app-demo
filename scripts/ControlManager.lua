@@ -190,12 +190,12 @@ function Character:update(val1) -- FPS
         
         if(self.m_model:getAnimation() ~= self.m_animList.walk) then
             self.m_model:setAnimation(self.m_animList.walk)
-            self.m_model:playAnimation()
+            self.m_model:playAnimation(true)
         end
     else
         if(self.m_model:getAnimation() ~= self.m_animList.idle) then
             self.m_model:setAnimation(self.m_animList.idle)
-            self.m_model:playAnimation()
+            self.m_model:playAnimation(true)
         end
     end
     if(self.m_moveState.jump == true) then
