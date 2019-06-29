@@ -71,7 +71,7 @@ function WorldManager.onGeometryCacheLoad()
     self.ms_modelCache.dummy = Model(GeometryCache:get("dummy"))
     self.ms_modelCache.dummy:setPosition(-12.0,0.0,-8.0)
     self.ms_modelCache.dummy:setAnimation(AnimationCache:get("dummy","idle"))
-    self.ms_modelCache.dummy:playAnimation()
+    self.ms_modelCache.dummy:playAnimation(true)
     
     self.ms_modelCache.wall = Model(GeometryCache:get("plane"))
     self.ms_modelCache.wall:setPosition(32,15,0)
