@@ -127,6 +127,10 @@ end
 
 function Character:setModel(ud1)
     self.m_model = ud1
+    if(self.m_model and self.m_collision) then
+        self.m_model:setCollidableWith(self.m_collision,false)
+        self.m_model:setCollision(self.m_collision)
+    end
 end
 function Character:getModel()
     return self.m_model
@@ -134,7 +138,8 @@ end
 
 function Character:setCollision(ud1)
     self.m_collision = ud1
-    if(self.m_model) then
+    if(self.m_collision and self.m_model) then
+        self.m_collision:setCollidableWith(self.m_model,false)
         self.m_model:setCollision(self.m_collision)
     end
 end
@@ -164,29 +169,29 @@ function Character:getAnimation(str1)
 end
 
 function Character:update(val1) -- FPS
-    if(self.m_moveState.left or self.m_moveState.right or self.m_moveState.forward or self.m_moveState.backward) then
+    if(math.bxor(self.m_moveState.left,self.m_moveState.right) or math.bxor(self.m_moveState.forward,self.m_moveState.backward)) then
         local l_cameraRot,_ = self.m_characterCamera:getAngles()
-        local l_dirRot = 0.0
-        if(self.m_moveState.forward) then
-            if(self.m_moveState.right) then l_dirRot = -0.25*math.pi
-            elseif(self.m_moveState.left) then l_dirRot = 0.25*math.pi end
-        elseif(self.m_moveState.backward) then
-            if(self.m_moveState.right) then l_dirRot = -0.75*math.pi
-            elseif(self.m_moveState.left) then l_dirRot = 0.75*math.pi
-            else l_dirRot = -math.pi end
-        else
-            if(self.m_moveState.right) then l_dirRot = -0.5*math.pi
-            elseif(self.m_moveState.left) then l_dirRot = 0.5*math.pi end
-        end
         
-        local l_colRot = Quat(self.m_collision:getRotation()):slerp(Quat(0,l_cameraRot+l_dirRot+math.pi,0),math.clamp(6.0/val1,0.0,1.0))
+        local l_dirVec = { x = 0, y = 0 }
+        if(self.m_moveState.forward) then l_dirVec.y = l_dirVec.y+1 end
+        if(self.m_moveState.backward) then l_dirVec.y = l_dirVec.y-1 end
+        if(self.m_moveState.left) then l_dirVec.x = l_dirVec.x-1 end
+        if(self.m_moveState.right) then l_dirVec.x = l_dirVec.x+1 end
+        
+        local l_dirRot = math.atan(l_dirVec.y,l_dirVec.x)-math.piHalf
+        
+        local l_colRot = Quat(
+            self.m_collision:getRotation()
+            ):slerp(
+                Quat(0,l_cameraRot+l_dirRot+math.pi,0),
+                math.clamp(6.0/val1,0.0,1.0)
+        )
         self.m_collision:setRotation(l_colRot:getXYZW())
         
         local l_moveX,l_moveY,l_moveZ = l_colRot:rotateVector(0,0,1)
-        local l_moveSpeed = 5.625/val1 -- 5.625 units per second
-        local l_px,l_py,l_pz = self.m_collision:getPosition()
-        l_px,l_py,l_pz = l_px+l_moveX*l_moveSpeed,l_py+l_moveY*l_moveSpeed,l_pz+l_moveZ*l_moveSpeed
-        self.m_collision:setPosition(l_px,l_py,l_pz)
+        local l_moveSpeed = 5.625
+        _,l_moveY,_ = self.m_collision:getVelocity()
+        self.m_collision:setVelocity(l_moveX*l_moveSpeed,l_moveY,l_moveZ*l_moveSpeed)
         
         if(self.m_model:getAnimation() ~= self.m_animList.walk) then
             self.m_model:setAnimation(self.m_animList.walk)
@@ -246,6 +251,7 @@ function ControlManager.onGeometryCacheLoad()
     local l_col = Collision("cone",20.0, 1.5,9.0)
     l_col:setPosition(0,4.5,0)
     l_col:setAngularFactor(0,0,0)
+    l_col:setFriction(50)
     self.ms_character:setCollision(l_col)
     
     self.ms_character:setAnimation("idle",AnimationCache:get("dummy","idle"))
