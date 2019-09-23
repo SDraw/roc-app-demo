@@ -63,14 +63,14 @@ vec3 getShading(in vec3 f_normal)
     {
         switch(int(gLightData[i][3].w))
         {
-            case 0:
+            case LIGHT_DIRECTIONAL:
                 l_result += getDirectionalShading(
                     f_normal,
                     gLightData[i][1].xyz,
                     gLightData[i][2]
                 );
                 break;
-            case 1:
+            case LIGHT_POINT:
                 l_result += getPointLightShading(
                     f_normal,
                     gLightData[i][0].xyz,
@@ -78,7 +78,7 @@ vec3 getShading(in vec3 f_normal)
                     gLightData[i][3].xyz
                 );
                 break;
-            case 2:
+            case LIGHT_SPOTLIGHT:
                 l_result += getSpotlightShading(
                     f_normal,
                     gLightData[i][0].xyz,
