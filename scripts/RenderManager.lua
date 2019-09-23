@@ -29,26 +29,21 @@ function RenderManager.onRender()
     clearRenderArea()
     SceneManager:draw("shadow")
     
-    -- Skybox pass
-    SceneManager:setActive("skybox")
-    clearRenderArea()
-    SceneManager:draw("skybox")
-    
     -- Main pass
     SceneManager:update_S2()
     SceneManager:setActive("main")
-    clearRenderArea(true,false)
+    clearRenderArea()
     SceneManager:draw("main")
     
     if(PhysicsManager:getDebugDraw()) then
-        SceneManager:setActive("physics")
         if(PhysicsManager:getDebugDrawMode() == "xray") then
             clearRenderArea(true,false)
         end
         drawPhysics()
     end
     
-    -- GUI pass
+    -- GUI pass, 'main' scene
+    clearRenderArea(true,false)
     GuiManager:draw()
 end
 

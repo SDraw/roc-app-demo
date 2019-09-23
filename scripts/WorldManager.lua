@@ -27,8 +27,6 @@ function WorldManager.onGeometryCacheLoad()
     
     -- Create models
     self.ms_modelCache.skybox = Model(GeometryCache:get("skybox"))
-    self.ms_modelCache.skybox:setRotation(Quat(0.0,math.pi*1.25,0.0):getXYZW())
-    
     self.ms_modelCache.plane = Model(GeometryCache:get("plane"))
     
     self.ms_modelCache.rigid = {}
@@ -79,15 +77,16 @@ function WorldManager.onGeometryCacheLoad()
     
     -- Add to render
     for _,v in ipairs({ "shadow", "main" }) do
-        SceneManager:addModelToScene(v,self.ms_modelCache.plane)
+        SceneManager:addModelToScene(v,self.ms_modelCache.plane,"default")
         for _,vv in ipairs(self.ms_modelCache.rigid) do
-            SceneManager:addModelToScene(v,vv)
+            SceneManager:addModelToScene(v,vv,"default")
         end
-        SceneManager:addModelToScene(v,self.ms_modelCache.dummy)
+        SceneManager:addModelToScene(v,self.ms_modelCache.dummy,"default")
     end
-    SceneManager:addModelToScene("main",self.ms_modelCache.wall)
-    SceneManager:addModelToScene("skybox",self.ms_modelCache.skybox)
+    SceneManager:addModelToScene("main",self.ms_modelCache.wall,"default")
+    SceneManager:addModelToScene("main",self.ms_modelCache.skybox,"skybox")
     
+    -- Get lights
     local l_lights = SceneManager:getLights("main")
     self.ms_lightCache = {
         point = {
