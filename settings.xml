@@ -1,10 +1,10 @@
 <settings>
-    <param name="vr" value="false"/>
-    <param name="antialiasing" value="2"/>
-    <param name="dimension" value="960x480"/>
-    <param name="fullscreen" value="false"/>
-    <param name="fpslimit" value="60"/>
-    <param name="vsync" value="false"/>
-    <param name="logging" value="false"/>
-    <param name="module" value="roc_module_lua.dll"/>
+    <setting name="vr" value="false"/>
+    <setting name="antialiasing" value="2"/>
+    <setting name="dimension" value="960x480"/>
+    <setting name="fullscreen" value="false"/>
+    <setting name="fpslimit" value="60"/>
+    <setting name="vsync" value="false"/>
+    <setting name="logging" value="false"/>
+    <setting name="module" value="roc_module_lua.dll"/>
 </settings>

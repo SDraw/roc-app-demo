@@ -1,4 +1,4 @@
-<module>
+<scripts>
     <script src="scripts/WindowManager.lua"/>
     <script src="scripts/RenderManager.lua"/>
     <script src="scripts/GuiManager.lua"/>
@@ -12,4 +12,4 @@
     <script src="scripts/PhysicsManager.lua"/>
     
     <script src="scripts/Utils.lua"/>
-</module>
+</scripts>
