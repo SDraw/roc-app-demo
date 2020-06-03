@@ -37,6 +37,7 @@ function SceneManager.init()
     self.ms_cache.shadow.m_camera:setDirection(-0.707106,-0.707106,0.0)
     self.ms_cache.shadow.m_camera:setOrthoParams(-32.0,32.0,-32.0,32.0)
     self.ms_cache.shadow.m_camera:setDepth(-50.0,50.0)
+    self.ms_cache.shadow.m_target:setProperty("color",false)
     self.ms_cache.shadow.m_scene:setCamera(self.ms_cache.shadow.m_camera)
     self.ms_cache.shadow.m_scene:setRenderTarget(self.ms_cache.shadow.m_target)
     self.ms_cache.shadow.m_scene:addShader(self.ms_cache.shadow.m_shader)
@@ -71,12 +72,12 @@ function SceneManager.init()
     
     self.ms_cache.main.m_scene:addShader(self.ms_cache.main.m_shader.default, "default",127)
     self.ms_cache.main.m_shader.default:attach(self.ms_cache.shadow.m_target,"gTexture3")
-    self.ms_cache.main.m_shader.default:setUniformValue("gSkyGradientDown", 0.73791,0.73791,0.73791)
-    self.ms_cache.main.m_shader.default:setUniformValue("gSkyGradientUp", 0.449218,0.710937,1.0)
+    self.ms_cache.main.m_shader.default:setUniformValue("gSkyGradientDown", "float3", 0.73791,0.73791,0.73791)
+    self.ms_cache.main.m_shader.default:setUniformValue("gSkyGradientUp", "float3", 0.449218,0.710937,1.0)
     
     self.ms_cache.main.m_scene:addShader(self.ms_cache.main.m_shader.skybox, "skybox",128)
-    self.ms_cache.main.m_shader.skybox:setUniformValue("gSkyGradientDown", 0.73791,0.73791,0.73791)
-    self.ms_cache.main.m_shader.skybox:setUniformValue("gSkyGradientUp", 0.449218,0.710937,1.0)
+    self.ms_cache.main.m_shader.skybox:setUniformValue("gSkyGradientDown", "float3", 0.73791,0.73791,0.73791)
+    self.ms_cache.main.m_shader.skybox:setUniformValue("gSkyGradientUp", "float3", 0.449218,0.710937,1.0)
     
     self.ms_cache.main.m_scene:addShader(self.ms_cache.main.m_shader.physics, "physics",126)
     self.ms_cache.main.m_scene:addShader(self.ms_cache.main.m_shader.screen, "screen",125)
@@ -122,7 +123,7 @@ function SceneManager:update_S1()
     self.ms_cache.shadow.m_camera:setPosition(self.ms_cache.main.m_camera:getPosition())
 end
 function SceneManager:update_S2()
-    self.ms_cache.main.m_shader.default:setUniformValue("gShadowViewProjectionMatrix",self.ms_cache.shadow.m_camera:getViewProjectionMatrix())
+    self.ms_cache.main.m_shader.default:setUniformValue("gShadowViewProjectionMatrix", "mat4", self.ms_cache.shadow.m_camera:getViewProjectionMatrix())
 end
 
 SceneManager = setmetatable({},SceneManager)

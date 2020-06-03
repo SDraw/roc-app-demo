@@ -26,24 +26,21 @@ function RenderManager.onRender()
     -- Shadow pass
     SceneManager:update_S1()
     SceneManager:setActive("shadow")
-    clearRenderArea()
     SceneManager:draw("shadow")
     
     -- Main pass
     SceneManager:update_S2()
     SceneManager:setActive("main")
-    clearRenderArea()
     SceneManager:draw("main")
     
     if(PhysicsManager:getDebugDraw()) then
         if(PhysicsManager:getDebugDrawMode() == "xray") then
-            clearRenderArea(true,false)
+            clearViewport(true,false)
         end
         drawPhysics()
     end
     
     -- GUI pass, 'main' scene
-    clearRenderArea(true,false)
     GuiManager:draw()
 end
 

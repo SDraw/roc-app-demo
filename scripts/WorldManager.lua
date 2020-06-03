@@ -5,6 +5,16 @@ function WorldManager.init()
     local self = WorldManager
 
     self.ms_boundary = {}
+    self.ms_modelCache = {}
+    
+    addEventHandler("onGeometryCacheLoad",self.onGeometryCacheLoad)
+end
+addEventHandler("onEngineStart",WorldManager.init)
+
+function WorldManager.onGeometryCacheLoad()
+    local self = WorldManager
+    
+    -- Create world collision
     self.ms_boundary[1] = Collision("box",0, 16,100,16)
     self.ms_boundary[1]:setPosition(0,100,16+16)
     self.ms_boundary[2] = Collision("box",0, 16,100,16)
@@ -15,15 +25,6 @@ function WorldManager.init()
     self.ms_boundary[4]:setPosition(-16-16,100,0)
     self.ms_boundary[5] = Collision("box",0, 32,16,32)
     self.ms_boundary[5]:setPosition(0,200+16,0)
-    
-    self.ms_modelCache = {}
-    
-    addEventHandler("onGeometryCacheLoad",self.onGeometryCacheLoad)
-end
-addEventHandler("onEngineStart",WorldManager.init)
-
-function WorldManager.onGeometryCacheLoad()
-    local self = WorldManager
     
     -- Create models
     self.ms_modelCache.skybox = Model(GeometryCache:get("skybox"))
@@ -75,7 +76,7 @@ function WorldManager.onGeometryCacheLoad()
     self.ms_modelCache.wall:setPosition(32,15,0)
     self.ms_modelCache.wall:setRotation(Quat(0,0,math.piHalf):getXYZW())
     
-    -- Add to render
+    -- Add to scenes
     for _,v in ipairs({ "shadow", "main" }) do
         SceneManager:addModelToScene(v,self.ms_modelCache.plane,"default")
         for _,vv in ipairs(self.ms_modelCache.rigid) do
