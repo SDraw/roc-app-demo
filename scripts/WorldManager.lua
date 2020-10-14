@@ -78,14 +78,14 @@ function WorldManager.onGeometryCacheLoad()
     
     -- Add to scenes
     for _,v in ipairs({ "shadow", "main" }) do
-        SceneManager:addModelToScene(v,self.ms_modelCache.plane,"default")
+        SceneManager:addModelToScene(v,self.ms_modelCache.plane)
         for _,vv in ipairs(self.ms_modelCache.rigid) do
-            SceneManager:addModelToScene(v,vv,"default")
+            SceneManager:addModelToScene(v,vv)
         end
-        SceneManager:addModelToScene(v,self.ms_modelCache.dummy,"default")
+        SceneManager:addModelToScene(v,self.ms_modelCache.dummy)
     end
-    SceneManager:addModelToScene("main",self.ms_modelCache.wall,"default")
-    SceneManager:addModelToScene("main",self.ms_modelCache.skybox,"skybox")
+    SceneManager:addModelToScene("main",self.ms_modelCache.wall)
+    SceneManager:addModelToScene("skybox",self.ms_modelCache.skybox)
     
     -- Get lights
     local l_lights = SceneManager:getLights("main")

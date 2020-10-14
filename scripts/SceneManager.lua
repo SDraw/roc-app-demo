@@ -7,10 +7,17 @@ function SceneManager.init()
     self.ms_cache = {
         shadow = {
             m_scene = Scene(),
-            m_light = false,
+            m_lights = {},
             m_camera = Camera("orthogonal"),
             m_shader = Shader("shaders/shadow_vert.glsl","shaders/shadow_frag.glsl"),
             m_target = RenderTarget("shadow",1024,1024,"linear")
+        },
+        skybox = {
+            m_scene = Scene(),
+            m_lights = {},
+            m_camera = false,
+            m_shader = Shader("shaders/skybox_vert.glsl","shaders/skybox_frag.glsl"),
+            m_target = false
         },
         main = {
             m_scene = Scene(),
@@ -22,17 +29,26 @@ function SceneManager.init()
                 Light("spotlight")
             },
             m_camera = Camera("perspective"),
-            m_shader =
-            {
-                default = Shader("shaders/main_vert.glsl","shaders/main_frag.glsl"),
-                skybox = Shader("shaders/skybox_vert.glsl","shaders/skybox_frag.glsl"),
-                physics = Shader("shaders/physics_vert.glsl","shaders/physics_frag.glsl"),
-                screen = Shader("shaders/texture_vert.glsl","shaders/texture_frag.glsl")
-            },
+            m_shader = Shader("shaders/main_vert.glsl","shaders/main_frag.glsl"),
+            m_target = false
+        },
+        physics = {
+            m_scene = Scene(),
+            m_lights = {},
+            m_camera = false,
+            m_shader = Shader("shaders/physics_vert.glsl","shaders/physics_frag.glsl"),
+            m_target = false
+        },
+        screen = {
+            m_scene = Scene(),
+            m_lights = {},
+            m_camera = false,
+            m_shader = Shader("shaders/texture_vert.glsl","shaders/texture_frag.glsl"),
             m_target = false
         }
     }
     
+    -- Shadow
     self.ms_cache.shadow.m_camera:setPosition(0.0,0.0,0.0)
     self.ms_cache.shadow.m_camera:setDirection(-0.707106,-0.707106,0.0)
     self.ms_cache.shadow.m_camera:setOrthoParams(-32.0,32.0,-32.0,32.0)
@@ -40,8 +56,15 @@ function SceneManager.init()
     self.ms_cache.shadow.m_target:setProperty("color",false)
     self.ms_cache.shadow.m_scene:setCamera(self.ms_cache.shadow.m_camera)
     self.ms_cache.shadow.m_scene:setRenderTarget(self.ms_cache.shadow.m_target)
-    self.ms_cache.shadow.m_scene:addShader(self.ms_cache.shadow.m_shader)
+    self.ms_cache.shadow.m_scene:setShader(self.ms_cache.shadow.m_shader)
     
+    -- Skybox
+    self.ms_cache.skybox.m_scene:setCamera(self.ms_cache.main.m_camera)
+    self.ms_cache.skybox.m_scene:setShader(self.ms_cache.skybox.m_shader)
+    self.ms_cache.skybox.m_shader:setUniformValue("gSkyGradientDown", "float3", 0.73791,0.73791,0.73791)
+    self.ms_cache.skybox.m_shader:setUniformValue("gSkyGradientUp", "float3", 0.449218,0.710937,1.0)
+    
+    -- Main
     self.ms_cache.main.m_lights[1]:setColor(1.0,1.0,1.0, 1.0)
     self.ms_cache.main.m_lights[1]:setDirection(-0.707106,-0.707106,0.0)
     
@@ -70,17 +93,17 @@ function SceneManager.init()
     end
     self.ms_cache.main.m_scene:setCamera(self.ms_cache.main.m_camera)
     
-    self.ms_cache.main.m_scene:addShader(self.ms_cache.main.m_shader.default, "default",127)
-    self.ms_cache.main.m_shader.default:attach(self.ms_cache.shadow.m_target,"gTexture3")
-    self.ms_cache.main.m_shader.default:setUniformValue("gSkyGradientDown", "float3", 0.73791,0.73791,0.73791)
-    self.ms_cache.main.m_shader.default:setUniformValue("gSkyGradientUp", "float3", 0.449218,0.710937,1.0)
+    self.ms_cache.main.m_scene:setShader(self.ms_cache.main.m_shader)
+    self.ms_cache.main.m_shader:attach(self.ms_cache.shadow.m_target,"gTexture3")
+    self.ms_cache.main.m_shader:setUniformValue("gSkyGradientDown", "float3", 0.73791,0.73791,0.73791)
+    self.ms_cache.main.m_shader:setUniformValue("gSkyGradientUp", "float3", 0.449218,0.710937,1.0)
     
-    self.ms_cache.main.m_scene:addShader(self.ms_cache.main.m_shader.skybox, "skybox",128)
-    self.ms_cache.main.m_shader.skybox:setUniformValue("gSkyGradientDown", "float3", 0.73791,0.73791,0.73791)
-    self.ms_cache.main.m_shader.skybox:setUniformValue("gSkyGradientUp", "float3", 0.449218,0.710937,1.0)
+    -- Physics
+    self.ms_cache.physics.m_scene:setCamera(self.ms_cache.main.m_camera)
+    self.ms_cache.physics.m_scene:setShader(self.ms_cache.physics.m_shader)
     
-    self.ms_cache.main.m_scene:addShader(self.ms_cache.main.m_shader.physics, "physics",126)
-    self.ms_cache.main.m_scene:addShader(self.ms_cache.main.m_shader.screen, "screen",125)
+    -- Screen
+    self.ms_cache.screen.m_scene:setShader(self.ms_cache.screen.m_shader)
     
     addEventHandler("onWindowResize",self.onWindowResize)
 end
@@ -123,7 +146,7 @@ function SceneManager:update_S1()
     self.ms_cache.shadow.m_camera:setPosition(self.ms_cache.main.m_camera:getPosition())
 end
 function SceneManager:update_S2()
-    self.ms_cache.main.m_shader.default:setUniformValue("gShadowViewProjectionMatrix", "mat4", self.ms_cache.shadow.m_camera:getViewProjectionMatrix())
+    self.ms_cache.main.m_shader:setUniformValue("gShadowViewProjectionMatrix", "mat4", self.ms_cache.shadow.m_camera:getViewProjectionMatrix())
 end
 
 SceneManager = setmetatable({},SceneManager)

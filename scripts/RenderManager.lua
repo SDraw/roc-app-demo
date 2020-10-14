@@ -28,19 +28,25 @@ function RenderManager.onRender()
     SceneManager:setActive("shadow")
     SceneManager:draw("shadow")
     
+    -- Skybox pass
+    SceneManager:setActive("skybox")
+    SceneManager:draw("skybox")
+    
     -- Main pass
-    SceneManager:update_S2()
     SceneManager:setActive("main")
+    SceneManager:update_S2()
     SceneManager:draw("main")
     
     if(PhysicsManager:getDebugDraw()) then
+        SceneManager:setActive("physics")
         if(PhysicsManager:getDebugDrawMode() == "xray") then
             clearViewport(true,false)
         end
         drawPhysics()
     end
     
-    -- GUI pass, 'main' scene
+    -- GUI pass
+    SceneManager:setActive("screen")
     GuiManager:draw()
 end
 
