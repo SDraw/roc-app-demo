@@ -1,4 +1,4 @@
-## Demo scene resource for [RunOnCoal game engine](../../../run-on-coal).
+## Demo scene resource for [ROC engine](../../../roc_engine).
 
 ### Controls
 * **W,A,S,D:** Movement.
